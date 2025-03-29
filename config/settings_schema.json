@@ -1,0 +1,14 @@
+[
+    {
+      "name": "General Settings",
+      "settings": [
+        {
+          "type": "text",
+          "id": "example_setting",
+          "label": "Example Setting",
+          "default": "Default Value"
+        }
+      ]
+    }
+  ]
+  
