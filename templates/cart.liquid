@@ -5,30 +5,27 @@
   {% else %}
     <ul class="cart-items">
       {% for item in cart.items %}
-  <li class="cart-item">
+        <li>
+          <!-- The simplest standard remove button: -->
+          <form method="post" action="/cart/change">
+            <!-- 'line' is 1-based index of this item in cart -->
+            <input type="hidden" name="line" value="{{ forloop.index }}">
+            <!-- Setting quantity to zero removes that line -->
+            <input type="hidden" name="quantity" value="0">
+            
+            <button type="submit">Remove</button>
+          </form>
 
-    <div class="cart-item-details">
-      <div>{{ item.product.title }}</div>
-      <div>Size: {{ item.variant.title }}</div>
-      <div>Qty: {{ item.quantity }}</div>
-    </div>
-        <button 
-      class="cart-remove" 
-      data-line-key="{{ item.key }}"
-    >
-      Remove
-    </button>
-
-    <div class="cart-item-price">{{ item.line_price | money }}</div>
-  </li>
-{% endfor %}
-
+          <!-- For debugging, show you which line # and key: -->
+          <p>
+            <strong>{{ item.product.title }}</strong>  
+            (line {{ forloop.index }}, key: {{ item.key }}, qty: {{ item.quantity }})
+          </p>
+        </li>
+      {% endfor %}
     </ul>
-
-    <div class="cart-total">
-      Total: {{ cart.total_price | money }}
-    </div>
-
-    <a href="/checkout" class="checkout-link">Checkout</a>
+    
+    <p>Cart total: {{ cart.total_price | money }}</p>
+    <a href="/checkout">Go to checkout</a>
   {% endif %}
 </div>
