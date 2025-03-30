@@ -30,10 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
 
       const line = parseInt(button.dataset.line);
-      console.log('Removing line:', line); // debug line
+      console.log('Removing line:', line); // Debug log
 
       try {
-        const res = await fetch('/cart/change.js', {
+        const response = await fetch('/cart/change.js', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', function () {
           })
         });
 
-        const json = await res.json();
-        console.log('Cart after change:', json); // debug line
+        const updatedCart = await response.json();
+        console.log('Cart updated:', updatedCart); // Debug log
         location.reload();
       } catch (err) {
-        console.error('Fetch error:', err);
+        console.error('Error removing cart item:', err);
       }
     });
   });
