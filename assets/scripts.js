@@ -30,10 +30,15 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
 
       const line = parseInt(button.dataset.line);
-      console.log('Removing line:', line); // Debug log
+      console.log('CLICKED REMOVE — line:', line); // 🧪 debug line
+
+      if (!line || isNaN(line)) {
+        console.warn('No valid line number found! Aborting remove.');
+        return;
+      }
 
       try {
-        const response = await fetch('/cart/change.js', {
+        const res = await fetch('/cart/change.js', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -44,11 +49,11 @@ document.addEventListener('DOMContentLoaded', function () {
           })
         });
 
-        const updatedCart = await response.json();
-        console.log('Cart updated:', updatedCart); // Debug log
+        const cart = await res.json();
+        console.log('CART AFTER REMOVAL:', cart); // 🧪 debug line
         location.reload();
       } catch (err) {
-        console.error('Error removing cart item:', err);
+        console.error('Error removing item:', err);
       }
     });
   });
