@@ -1,27 +1,36 @@
-
 <!-- CART -->
 
-{% layout 'theme' %}
-
-<div class="page-content">
-  <h1>Your Cart</h1>
+<div class="page-content cart-page">
   {% if cart.item_count == 0 %}
     <p>Your cart is empty.</p>
   {% else %}
-    <form action="/cart" method="post">
-      <table>
-        {% for item in cart.items %}
-          <tr>
-            <td>{{ item.product.title }}</td>
-            <td>{{ item.variant.title }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.line_price | money }}</td>
-          </tr>
-        {% endfor %}
-      </table>
-      <p>Total: {{ cart.total_price | money }}</p>
-      <button type="submit">Update Cart</button>
-      <a href="/checkout">Checkout</a>
-    </form>
+    <ul class="cart-items">
+      {% for item in cart.items %}
+        <li class="cart-item">
+<button class="remove-item" data-line="{{ forloop.index }}">
+  X
+</button>
+
+
+
+
+
+          <div class="cart-item-details">
+            <div>{{ item.product.title }}</div>
+            <div>Size: {{ item.variant.title }}</div>
+            <div>Qty: {{ item.quantity }}</div>
+          </div>
+          <div class="cart-item-price">{{ item.line_price | money }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <div class="cart-total">
+      Total: {{ cart.total_price | money }}
+    </div>
+
+    <a href="/checkout" class="checkout-link">Checkout</a>
   {% endif %}
 </div>
+
+

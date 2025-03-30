@@ -1,1 +1,39 @@
-{% section 'shop-all-collection' %}
+<main>
+  <div class="product-grid">
+    {% for product in collection.products %}
+        <div class="product-card">
+            <div class="product-image">
+                <a href="{{ product.url }}">
+                <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}">
+                </a>
+            </div>
+
+            <div class="product-bar">
+                <div class="product-info-left">
+                    <div><span class="label">ITEM:</span></div>
+                    <div><span class="label">SIZE:</span></div>
+                    <div>{{ product.price | money }}</div>
+                </div>
+
+                <div class="product-info-right">
+                    <div class="product-title">[ {{ product.title | upcase }} ]</div>
+                    <div class="sizes">
+                    {% for variant in product.variants %}
+                        <button class="size-button" data-variant-id="{{ variant.id }}">[ {{ variant.option1 }} ]</button>
+                    {% endfor %}
+                    </div>
+                    <form method="post" action="/cart/add">
+                        <input type="hidden" name="id" value="{{ product.variants.first.id }}" class="variant-id">
+                        <button type="submit" class="add-to-cart-link">[ ADD TO CART ]</button>
+                    </form>
+                </div>
+                </div>
+
+
+        </div>
+
+    {% endfor %}
+  </div>
+</main>
+
+

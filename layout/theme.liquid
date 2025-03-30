@@ -7,8 +7,19 @@
     {{ content_for_header }}
     {{ 'styles.css' | asset_url | stylesheet_tag }}
   </head>
+  {{ 'scripts.js' | asset_url | script_tag }}
   <body>
+
     {% section 'navbar' %}
+
+    {% unless template.name == 'index' %}
+      <div class="sub-navbar">
+        <div class="subnav-left"><a href="javascript:history.back()">BACK</a></div>
+        <div class="page-title">{{ page_title }}</div>
+      </div>
+    {% endunless %}
+
     {{ content_for_layout }}
+
   </body>
 </html>
