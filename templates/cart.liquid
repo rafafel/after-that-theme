@@ -7,9 +7,11 @@
     <ul class="cart-items">
       {% for item in cart.items %}
         <li class="cart-item">
-<button class="remove-item" data-line="{{ forloop.index }}">
-  X
-</button>
+<form method="post" action="/cart/change">
+  <input type="hidden" name="id" value="{{ item.key }}">
+  <input type="hidden" name="quantity" value="0">
+  <button type="submit" class="remove-item">X</button>
+</form>
 
 
 
