@@ -25,37 +25,46 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  document.querySelectorAll('.remove-item').forEach(button => {
-    button.addEventListener('click', async (e) => {
-      e.preventDefault();
-
-      const line = parseInt(button.dataset.line);
-      console.log('CLICKED REMOVE — line:', line); // 🧪 debug line
-
-      if (!line || isNaN(line)) {
-        console.warn('No valid line number found! Aborting remove.');
-        return;
-      }
-
-      try {
-        const res = await fetch('/cart/change.js', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            line: line,
-            quantity: 0
-          })
-        });
-
-        const cart = await res.json();
-        console.log('CART AFTER REMOVAL:', cart); // 🧪 debug line
-        location.reload();
-      } catch (err) {
-        console.error('Error removing item:', err);
-      }
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('scripts.js: DOM fully loaded');
+  
+    const buttons = document.querySelectorAll('.remove-item');
+    console.log('Found remove buttons:', buttons.length);
+  
+    buttons.forEach(button => {
+      console.log('Binding button:', button);
+      button.addEventListener('click', async (e) => {
+        e.preventDefault();
+  
+        const line = parseInt(button.dataset.line);
+        console.log('CLICKED REMOVE — line:', line);
+  
+        if (!line || isNaN(line)) {
+          console.warn('No valid line number found!');
+          return;
+        }
+  
+        try {
+          const res = await fetch('/cart/change.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              line: line,
+              quantity: 0
+            })
+          });
+  
+          const cart = await res.json();
+          console.log('Updated cart:', cart);
+          location.reload();
+        } catch (err) {
+          console.error('Error during fetch:', err);
+        }
+      });
     });
   });
+  
 
 });
