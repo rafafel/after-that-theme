@@ -48,8 +48,10 @@ document.addEventListener('DOMContentLoaded', function () {
           const res = await fetch('/cart/change.js', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
-            },
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+            ,
             body: JSON.stringify({
               line: line,
               quantity: 0
