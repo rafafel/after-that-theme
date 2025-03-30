@@ -25,5 +25,41 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+// Select all remove buttons
+const removeButtons = document.querySelectorAll('.cart-remove');
+  
+removeButtons.forEach((btn) => {
+  btn.addEventListener('click', (event) => {
+    event.preventDefault(); // Stop any default link or button behavior
+
+    // Get the unique line item key from the data attribute
+    const lineKey = btn.getAttribute('data-line-key');
+    if (!lineKey) return; // Safety check
+
+    // Send POST request to remove only this item
+    fetch('/cart/change.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Shopify usually expects these
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: JSON.stringify({
+        id: lineKey,   // NOTE: 'id' is the line item key
+        quantity: 0
+      })
+    })
+    .then((response) => response.json())
+    .then((cartData) => {
+      // On success, you can refresh the page, or re-render the cart in JS.
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.error('Error removing item:', error);
+    });
+  });
+});
+
 });
 

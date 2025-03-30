@@ -1,30 +1,28 @@
 <!-- CART -->
-
 <div class="page-content cart-page">
   {% if cart.item_count == 0 %}
     <p>Your cart is empty.</p>
   {% else %}
     <ul class="cart-items">
       {% for item in cart.items %}
+  <li class="cart-item">
 
-      
-        <li class="cart-item">
-          <form method="post" action="/cart/change" class="remove-item-form">
-            <input type="hidden" name="id" value="{{ item.key }}">
-            <input type="hidden" name="quantity" value="0">
-            <button type="submit" class="remove-item">X</button>
-          </form>
+    <div class="cart-item-details">
+      <div>{{ item.product.title }}</div>
+      <div>Size: {{ item.variant.title }}</div>
+      <div>Qty: {{ item.quantity }}</div>
+    </div>
+        <button 
+      class="cart-remove" 
+      data-line-key="{{ item.key }}"
+    >
+      Remove
+    </button>
 
-          <div class="cart-item-details">
-            <div>{{ item.product.title }}</div>
-            <div>Size: {{ item.variant.title }}</div>
-            <div>Qty: {{ item.quantity }}</div>
-          </div>
+    <div class="cart-item-price">{{ item.line_price | money }}</div>
+  </li>
+{% endfor %}
 
-          <div class="cart-item-price">{{ item.line_price | money }}</div>
-        </li>
-
-      {% endfor %}
     </ul>
 
     <div class="cart-total">
@@ -34,5 +32,3 @@
     <a href="/checkout" class="checkout-link">Checkout</a>
   {% endif %}
 </div>
-
-
