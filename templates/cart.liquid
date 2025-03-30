@@ -8,10 +8,11 @@
       {% for item in cart.items %}
         <li class="cart-item">
 <form method="post" action="/cart/change">
-  <input type="hidden" name="id" value="{{ item.key }}">
+  <input type="hidden" name="line" value="{{ forloop.index }}">
   <input type="hidden" name="quantity" value="0">
   <button type="submit" class="remove-item">X</button>
 </form>
+
 
 
 
