@@ -42,6 +42,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  
+
+  // NAVBAR OFFSET
+    function updateOffsetVar() {
+      const navbar = document.querySelector('.navbar');
+      const subnavbar = document.querySelector('.sub-navbar');
+      const totalHeight = 
+        (navbar?.offsetHeight || 0) + (subnavbar?.offsetHeight || 0);
+
+      document.documentElement.style.setProperty('--navbar-offset', `${totalHeight}px`);
+    }
+
+    updateOffsetVar();
+    window.addEventListener('resize', updateOffsetVar);
+
+
+
   // landing + rotation
   const hoverPairs = [
     {
