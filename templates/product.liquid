@@ -1,0 +1,47 @@
+{% layout 'theme' %}
+
+<main class="product-page">
+  <div class="product-main">
+
+    <div class="product-main-info">
+      <h1 class="product-title">[ {{ product.title | upcase }} ]</h1>
+      <div class="product-description">
+        {{ product.description }}
+      </div>      
+      <div class="product-price">{{ product.price | money }}</div>
+
+      <form method="post" action="/cart/add">
+        <div class="product-options">
+          {% assign selected_set = false %}
+          {% for variant in product.variants %}
+            {% assign is_available = variant.available %}
+            {% assign is_selected = false %}
+            {% if is_available and selected_set == false %}
+              {% assign is_selected = true %}
+              {% assign selected_set = true %}
+            {% endif %}
+            <button
+              class="size-button {% if is_selected %}selected{% endif %} {% unless is_available %}sold-out{% endunless %}"
+              data-variant-id="{{ variant.id }}"
+              {% unless is_available %}disabled{% endunless %}
+            >
+              {{ variant.option1 }}
+            </button>
+          {% endfor %}
+        </div>
+        <input type="hidden" name="id" value="" class="variant-id">
+        <button type="submit" class="add-to-cart-link">[ ADD TO CART ]</button>
+      </form>
+    </div>
+
+    <div class="product-main-image carousel">
+        <button class="carousel-btn prev">&#10094;</button>
+        <div class="carousel-images">
+          {% for image in product.images %}
+            <img src="{{ image | img_url: '1200x' }}" alt="{{ product.title }} image {{ forloop.index }}" class="carousel-image {% if forloop.first %}active{% endif %}">
+          {% endfor %}
+        </div>
+        <button class="carousel-btn next">&#10095;</button>
+      </div>
+      
+</main>

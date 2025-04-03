@@ -1,31 +1,41 @@
 <!-- CART -->
+
+{% layout 'theme' %}
+{% assign page_title = "SHOPPING CART" %}
+
 <div class="page-content cart-page">
   {% if cart.item_count == 0 %}
-    <p>Your cart is empty.</p>
+    <div class="cart-empty-wrapper">
+      <a href="/collections/shop-all" class="cart-back-link">❮ BACK TO SHOP ALL</a>
+      <p class="cart-empty-message">YOUR SHOPPING CART IS CURRENTLY EMPTY.</p>
+    </div>
   {% else %}
     <ul class="cart-items">
       {% for item in cart.items %}
-        <li>
-          <!-- The simplest standard remove button: -->
-          <form method="post" action="/cart/change">
-            <!-- 'line' is 1-based index of this item in cart -->
-            <input type="hidden" name="line" value="{{ forloop.index }}">
-            <!-- Setting quantity to zero removes that line -->
-            <input type="hidden" name="quantity" value="0">
-            
-            <button type="submit">Remove</button>
-          </form>
-
-          <!-- For debugging, show you which line # and key: -->
-          <p>
-            <strong>{{ item.product.title }}</strong>  
-            (line {{ forloop.index }}, key: {{ item.key }}, qty: {{ item.quantity }})
-          </p>
+        <li class="cart-item">
+          <div class="cart-item-thumbnail">
+            <img src="{{ item.image | image_url: width: 100 }}" alt="{{ item.product.title }}">
+          </div>        
+          <div class="cart-item-details">
+            <div>{{ item.product.title }}</div>
+            <div>Size: {{ item.variant.title }}</div>
+            <div>Qty: {{ item.quantity }}</div>
+            <form method="post" action="/cart/change" class="remove-item-form">
+              <input type="hidden" name="id" value="{{ item.key }}">
+              <input type="hidden" name="quantity" value="0">
+              <button type="submit" class="remove-item">REMOVE</button>
+            </form>            
+          </div>
+          <div class="cart-item-price">{{ item.line_price | money }}</div>
         </li>
       {% endfor %}
     </ul>
-    
-    <p>Cart total: {{ cart.total_price | money }}</p>
-    <a href="/checkout">Go to checkout</a>
+
+    <div class="cart-checkout-total">
+      <div class="cart-total">
+        Total: {{ cart.total_price | money }}
+      </div>
+      <a href="/checkout" class="checkout-link">Checkout</a>
+    </div>
   {% endif %}
 </div>

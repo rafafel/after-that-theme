@@ -1,12 +1,21 @@
-<main>
+<main class="products-page">
   <div class="product-grid">
     {% for product in collection.products %}
         <div class="product-card">
             <div class="product-image">
-                <a href="{{ product.url }}">
-                <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}">
-                </a>
+            <a href="{{ product.url }}">
+                {% assign back = product.images[1] %}
+                <img
+                src="{{ product.featured_image | img_url: '800x' }}"
+                alt="{{ product.title }}"
+                class="hover-switch"
+                {% if back %}
+                    data-alt-src="{{ back | img_url: '800x' }}"
+                {% endif %}
+                >
+            </a>
             </div>
+
 
             <div class="product-bar">
                 <div class="product-info-left">
@@ -18,13 +27,29 @@
                 <div class="product-info-right">
                     <div class="product-title">[ {{ product.title | upcase }} ]</div>
                     <div class="sizes">
-                    {% for variant in product.variants %}
-                        <button class="size-button" data-variant-id="{{ variant.id }}">[ {{ variant.option1 }} ]</button>
-                    {% endfor %}
+                        {% assign selected_set = false %}
+                        {% for variant in product.variants %}
+                        {% assign is_available = variant.available %}
+                        {% assign is_selected = false %}
+
+                        {% if is_available and selected_set == false %}
+                            {% assign is_selected = true %}
+                            {% assign selected_set = true %}
+                        {% endif %}
+
+                        <button
+                            class="size-button
+                            {% if is_selected %}selected{% endif %}
+                            {% unless is_available %}sold-out{% endunless %}"
+                            data-variant-id="{{ variant.id }}"
+                            {% unless is_available %}disabled{% endunless %}>
+                            {{ variant.option1 }}
+                        </button>
+                        {% endfor %}
                     </div>
                     <form method="post" action="/cart/add">
-                        <input type="hidden" name="id" value="{{ product.variants.first.id }}" class="variant-id">
-                        <button type="submit" class="add-to-cart-link">[ ADD TO CART ]</button>
+                        <input type="hidden" name="id" value="" class="variant-id">
+                        <span>[ <button type="submit" class="add-to-cart-link">ADD TO CART</button> ]</span>
                     </form>
                 </div>
                 </div>
