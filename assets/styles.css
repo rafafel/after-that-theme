@@ -786,14 +786,6 @@ a{
 
   }
 
-  @media (pointer: coarse) {
-    .nav-top-left:hover ~ .plus-wrapper .plus-top-left,
-    .nav-top-right:hover ~ .plus-wrapper .plus-top-right,
-    .nav-bottom-left:hover ~ .plus-wrapper .plus-bottom-left,
-    .nav-bottom-right:hover ~ .plus-wrapper .plus-bottom-right {
-      transform: none !important;
-    }
-  }
   
   
 

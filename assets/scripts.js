@@ -204,26 +204,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   //NO HOVER MOBILE
-  if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
-    for (let i = 0; i < document.styleSheets.length; i++) {
-      const styleSheet = document.styleSheets[i];
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    document.querySelectorAll(".plus").forEach(plus => {
+      plus.style.transform = "none";
+      plus.style.transition = "none";
+    });
   
-      try {
-        const rules = styleSheet.cssRules;
-        if (!rules) continue;
-  
-        for (let j = rules.length - 1; j >= 0; j--) {
-          const rule = rules[j];
-          if (rule.type === CSSRule.STYLE_RULE && rule.selectorText && rule.selectorText.includes(':hover')) {
-            styleSheet.deleteRule(j);
-          }
-        }
-      } catch (e) {
-        // Ignore CORS-protected stylesheets
-        continue;
-      }
+    // Stop any hover transforms from being applied
+    const plusWrapper = document.querySelector(".plus-wrapper");
+    if (plusWrapper) {
+      plusWrapper.querySelectorAll(".plus").forEach(p => {
+        p.addEventListener("mouseenter", e => e.stopPropagation(), true);
+      });
     }
   }
+  
   
 
 
