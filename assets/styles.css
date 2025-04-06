@@ -780,6 +780,9 @@ a{
     .plus-bottom-left  { bottom: 35%; left: 15%; }
     .plus-bottom-right { bottom: 35%; right: 15%; }
 
+    .nav-link:hover{
+      text-decoration: none;
+    }
 
     .nav-link:active {
       color: #444 !important;
