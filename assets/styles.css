@@ -781,6 +781,11 @@ a{
     .plus-bottom-right { bottom: 35%; right: 15%; }
 
 
+    .nav-link:active {
+      color: #444 !important;
+      text-decoration: none !important;
+    }
+
 
 
 
