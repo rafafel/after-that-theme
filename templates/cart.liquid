@@ -10,6 +10,8 @@
       <p class="cart-empty-message">YOUR SHOPPING CART IS CURRENTLY EMPTY.</p>
     </div>
   {% else %}
+
+  <div class="cart-wrapper">
     <ul class="cart-items">
       {% for item in cart.items %}
         <li class="cart-item">
@@ -19,11 +21,19 @@
           <div class="cart-item-details">
             <div>{{ item.product.title }}</div>
             <div>Size: {{ item.variant.title }}</div>
-            <div>Qty: {{ item.quantity }}</div>
+            <div class="cart-qty-wrapper">
+              QTY:
+              <form method="post" action="/cart/change" class="cart-qty-form">
+                <input type="hidden" name="id" value="{{ item.key }}">
+                <button type="submit" name="quantity" value="{{ item.quantity | minus: 1 }}" class="qty-btn">–</button>
+                <span class="cart-qty">{{ item.quantity }}</span>
+                <button type="submit" name="quantity" value="{{ item.quantity | plus: 1 }}" class="qty-btn">+</button>
+              </form>
+            </div>
             <form method="post" action="/cart/change" class="remove-item-form">
               <input type="hidden" name="id" value="{{ item.key }}">
               <input type="hidden" name="quantity" value="0">
-              <button type="submit" class="remove-item">REMOVE</button>
+              <!--<button type="submit" class="remove-item">REMOVE</button>-->
             </form>            
           </div>
           <div class="cart-item-price">{{ item.line_price | money }}</div>
@@ -31,11 +41,11 @@
       {% endfor %}
     </ul>
 
-    <div class="cart-checkout-total">
-      <div class="cart-total">
-        Total: {{ cart.total_price | money }}
-      </div>
+    <div class="cart-summary">
+      <div class="cart-total">Total: {{ cart.total_price | money }}</div>
       <a href="/checkout" class="checkout-link">Checkout</a>
     </div>
+    
+  </div>  
   {% endif %}
 </div>

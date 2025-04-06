@@ -8,7 +8,7 @@
     {{ 'styles.css' | asset_url | stylesheet_tag }}
       {{ 'scripts.js' | asset_url | script_tag }}
   </head>
-  <body>
+  <body class="{% if template == 'index' %}landing{% endif %}">
 
     {% section 'navbar' %}
 
@@ -20,6 +20,7 @@
     {% endunless %}
 
     {{ content_for_layout }}
+
 
   </body>
 </html>

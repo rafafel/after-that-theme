@@ -98,6 +98,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Find all plus elements and forcibly reset their transforms
+    const pluses = document.querySelectorAll(".plus");
+    pluses.forEach(plus => {
+      plus.style.transform = "none";
+      plus.style.transition = "none";
+    });
+
+    // Optional: add a class to override hover logic if needed
+    document.body.classList.add("no-plus-hover");
+  }
+
 
   //second image hover
   const switchImages = document.querySelectorAll("img.hover-switch");
@@ -187,4 +201,31 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
+
+
+  //NO HOVER MOBILE
+  if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+    for (let i = 0; i < document.styleSheets.length; i++) {
+      const styleSheet = document.styleSheets[i];
+  
+      try {
+        const rules = styleSheet.cssRules;
+        if (!rules) continue;
+  
+        for (let j = rules.length - 1; j >= 0; j--) {
+          const rule = rules[j];
+          if (rule.type === CSSRule.STYLE_RULE && rule.selectorText && rule.selectorText.includes(':hover')) {
+            styleSheet.deleteRule(j);
+          }
+        }
+      } catch (e) {
+        // Ignore CORS-protected stylesheets
+        continue;
+      }
+    }
+  }
+  
+
+
+
 });
