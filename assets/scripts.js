@@ -203,21 +203,40 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
-  //NO HOVER MOBILE
+  //MOBILE
+
+  //NO HOVER
   const isMobile = window.innerWidth <= 768;
   if (isMobile) {
     document.querySelectorAll(".plus").forEach(plus => {
       plus.style.transform = "none";
       plus.style.transition = "none";
     });
-  
-    // Stop any hover transforms from being applied
+
     const plusWrapper = document.querySelector(".plus-wrapper");
     if (plusWrapper) {
       plusWrapper.querySelectorAll(".plus").forEach(p => {
         p.addEventListener("mouseenter", e => e.stopPropagation(), true);
       });
     }
+
+
+    //TAP TXT COLOR
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault(); // Stop instant nav
+        const href = this.getAttribute('href');
+  
+        // Add a class that darkens the link
+        this.classList.add('nav-pressed');
+  
+        // Navigate after a quick flash
+        setTimeout(() => {
+          window.location.href = href;
+        }, 100); // 100ms delay for visual feedback
+      });
+    });
+
   }
   
   
