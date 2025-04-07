@@ -220,23 +220,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-
-    //TAP TXT COLOR
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault(); // Stop instant nav
-        const href = this.getAttribute('href');
-  
-        // Add a class that darkens the link
-        this.classList.add('nav-pressed');
-  
-        // Navigate after a quick flash
-        setTimeout(() => {
-          window.location.href = href;
-        }, 100); // 100ms delay for visual feedback
-      });
-    });
-
   }
   
   
