@@ -88,6 +88,7 @@ a{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 20;
   }
 
   .subnav-left a {
@@ -220,6 +221,7 @@ a{
   .product-image {
     flex: 1;
     overflow: hidden;
+    position: relative;
   }
   
   .product-image img {
@@ -227,6 +229,20 @@ a{
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  .product-image img.secondary {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+  
+  .product-image img.secondary.visible {
+    opacity: 1;
   }
   
   
@@ -345,6 +361,33 @@ a{
     opacity: 1;
   }
 
+  .go-to-cart-filler {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100vw / 3 * var(--span));
+    height: calc(100vh - var(--navbar-offset));
+    background: black;
+    color: white;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  
+  .go-to-cart-link {
+    text-decoration: none;
+    color: white;
+    border: 1px solid white;
+    padding: 6px 12px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  
+  .go-to-cart-link:hover {
+    background: white;
+    color: black;
+  }
+  
+
 
 
 
@@ -353,7 +396,7 @@ a{
   .product-page {
     background-color: #5A5A5A;
     color:  white;
-    height: 100vh;
+    height: 100%;
     display: flex;
     align-items: center;
   }
@@ -379,7 +422,6 @@ a{
   
 
   .product-page .product-main-image {
-    flex: 0 0 50vw;
     height: 100%;
     display: flex;
     align-items: center;
@@ -456,7 +498,7 @@ a{
 
   .product-page .carousel {
     position: relative;
-    flex: 0 0 50vw;
+    flex: 0 0 40vw;
     height: 100%;
     overflow: hidden;
     display: flex;
@@ -535,7 +577,7 @@ a{
     width: 50vw;
     margin: 0;
     border-right: 1px solid #999;
-    background: white;
+    background: rgb(225, 225, 225);
     list-style: none;
     padding: 0;
     display: flex;
@@ -551,6 +593,15 @@ a{
     align-items: stretch;
     justify-content: space-between;
     border-bottom: 1px solid #999;
+  }
+
+  .cart-item a:hover{
+    text-decoration: underline;
+  }
+
+  .cart-item-title{
+    display: inline-block;
+    padding-bottom: 10px;
   }
   
   .remove-item-form {
@@ -573,10 +624,15 @@ a{
     letter-spacing: 0.5px;
     padding: 20px;
   }
+
+  .cart-item-details .product-description{
+    color: #5d5d5d;
+  }
   
-  .cart-item-price {
+  .cart-item-price-qty {
     font-size: 12px;
     padding: 20px;
+    text-align: right;
   }
 
   .cart-item-thumbnail {
@@ -593,18 +649,31 @@ a{
   .cart-summary {
     display: flex;
     width: 50vw;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: end;
     align-items: center;
+    padding-right: 50px;
+    background: black;
+    color: white;
   }
   
   .cart-summary .checkout-link {
-    margin-top: 10px;
+    border: 1px solid white;
+    text-decoration: none;
+    padding: 6px;
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+
+  .cart-summary .checkout-link:hover {
+    border: 1px solid #999;
+    background: #999;
+    color: black;
   }
   
   .cart-total {
+    padding-right: 20px;
     font-size: 14px;
-    margin-top: 20px;
     text-transform: uppercase;
   }
 
@@ -613,12 +682,6 @@ a{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-  
-  .checkout-link {
-    display: block;
-    margin-top: 10px;
-    text-decoration: underline;
   }
 
   .cart-empty-wrapper {
@@ -650,15 +713,15 @@ a{
 
   .cart-qty-wrapper {
     display: flex;
-    align-items: center;
+    justify-content: flex-end;
     font-size: 12px;
     text-transform: uppercase;
+    color: #5d5d5d;
   }
   
   .cart-qty-form {
     display: flex;
     align-items: center;
-
   }
   
   .cart-qty-form .qty-btn {
@@ -667,13 +730,28 @@ a{
     font-size: inherit;
     font-weight: 800;
     cursor: pointer;
-    color: black;
+    color: #5d5d5d;
     padding: 0 3px;
   }
   
   .cart-qty-form .cart-qty {
     min-width: 12px;
     text-align: center;
+  }
+
+  .add-confirm {
+    color: white;
+    margin-left: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 10px;
+    position: relative;
+    right: 5px;
+    top: 2px;
+  }
+  
+  .add-confirm.visible {
+    opacity: 1;
   }
   
 
@@ -738,6 +816,14 @@ a{
 
 
   /* MOBILE */
+
+  .desktop {
+    display: block;
+  }
+  
+  .mobile {
+    display: none;
+  }
 
   @media screen and (max-width: 768px) {
     
@@ -805,6 +891,30 @@ a{
       text-decoration: none !important;
     }
 
+    .plus-top-left,
+    .plus-top-right,
+    .plus-bottom-left,
+    .plus-bottom-right {
+      transform: none !important;
+    }
+
+    .sub-navbar {
+      padding: 5px 20px 5px 20px;
+    }
+  
+    .subnav-left a {
+      color: black;
+      cursor: pointer;
+    }
+    
+    .subnav-left a:hover {
+      text-decoration: none;
+    }
+
+    .page-title{
+      font-size: 10px;
+    }
+
 
     /*PRODUCTS*/
     .product-page .product-main {
@@ -842,6 +952,75 @@ a{
       padding: 20px;
       order: 2;
     }
+
+    .go-to-cart-filler {
+      display: none !important;
+    }
+
+
+    /*CART*/
+    .cart-wrapper{
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .cart-items{
+      width: 100%;
+      height: 450px;
+      flex: 0 0 auto;
+      border: none;
+    }
+
+    .cart-summary{
+      width: 100%;
+      flex: 1;
+    }
+
+    .cart-item{
+      height: 100px;
+    }
+
+    .cart-item-price{
+      font-size: 10px;
+      margin-bottom: 10px;
+    }
+
+
+  /* ABOUT PAGE */
+
+  .about-page {
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0px;
+  }
+  
+  .about-left {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+  }
+  
+  .about-right {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .about-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .about-footer {
+    margin-top: 60px;
+  }
 
 
   }

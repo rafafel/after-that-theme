@@ -6,7 +6,7 @@
 <div class="page-content cart-page">
   {% if cart.item_count == 0 %}
     <div class="cart-empty-wrapper">
-      <a href="/collections/shop-all" class="cart-back-link">❮ BACK TO SHOP ALL</a>
+      <a href="/" class="cart-back-link">❮ BACK TO HOME</a>
       <p class="cart-empty-message">YOUR SHOPPING CART IS CURRENTLY EMPTY.</p>
     </div>
   {% else %}
@@ -15,20 +15,15 @@
     <ul class="cart-items">
       {% for item in cart.items %}
         <li class="cart-item">
-          <div class="cart-item-thumbnail">
-            <img src="{{ item.image | image_url: width: 100 }}" alt="{{ item.product.title }}">
-          </div>        
+          <a href="{{ item.url }}" class="cart-item-thumbnail">
+            <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.product.title }}">
+          </a>        
           <div class="cart-item-details">
-            <div>{{ item.product.title }}</div>
-            <div>Size: {{ item.variant.title }}</div>
-            <div class="cart-qty-wrapper">
-              QTY:
-              <form method="post" action="/cart/change" class="cart-qty-form">
-                <input type="hidden" name="id" value="{{ item.key }}">
-                <button type="submit" name="quantity" value="{{ item.quantity | minus: 1 }}" class="qty-btn">–</button>
-                <span class="cart-qty">{{ item.quantity }}</span>
-                <button type="submit" name="quantity" value="{{ item.quantity | plus: 1 }}" class="qty-btn">+</button>
-              </form>
+            <div class="cart-item-title">
+              <a href="{{ item.url }}">{{ item.product.title }}</a> - SIZE: {{ item.variant.title }}
+            </div>
+            <div class="desktop product-description">
+              {{ item.product.description }}
             </div>
             <form method="post" action="/cart/change" class="remove-item-form">
               <input type="hidden" name="id" value="{{ item.key }}">
@@ -36,7 +31,18 @@
               <!--<button type="submit" class="remove-item">REMOVE</button>-->
             </form>            
           </div>
-          <div class="cart-item-price">{{ item.line_price | money }}</div>
+          <div class="cart-item-price-qty">
+            <div class="cart-item-price">{{ item.line_price | money }}</div>
+            <div class="cart-qty-wrapper">
+              
+              <form method="post" action="/cart/change" class="cart-qty-form">
+                <input type="hidden" name="id" value="{{ item.key }}">
+                <button type="submit" name="quantity" value="{{ item.quantity | minus: 1 }}" class="qty-btn">–</button>
+                <span class="cart-qty">{{ item.quantity }}</span>
+                <button type="submit" name="quantity" value="{{ item.quantity | plus: 1 }}" class="qty-btn">+</button>
+              </form>
+            </div>
+          </div>
         </li>
       {% endfor %}
     </ul>

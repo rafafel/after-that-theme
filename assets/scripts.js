@@ -114,20 +114,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   //second image hover
-  const switchImages = document.querySelectorAll("img.hover-switch");
 
-  switchImages.forEach((img) => {
-    const altSrc = img.getAttribute("data-alt-src");
-    if (!altSrc) return;
-
-    const originalSrc = img.src;
-
-    img.addEventListener("mouseenter", () => {
-      img.src = altSrc;
+  document.querySelectorAll('.product-image').forEach(wrapper => {
+    const secondary = wrapper.querySelector('img.secondary');
+    if (!secondary) return;
+  
+    wrapper.addEventListener('mouseenter', () => {
+      secondary.classList.add('visible');
     });
-
-    img.addEventListener("mouseleave", () => {
-      img.src = originalSrc;
+  
+    wrapper.addEventListener('mouseleave', () => {
+      secondary.classList.remove('visible');
     });
   });
 
@@ -203,24 +200,54 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
-  //MOBILE
+  //ADD TO CART CONFIRM CHECK
+  document.querySelectorAll('.add-to-cart-form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
 
-  //NO HOVER
-  const isMobile = window.innerWidth <= 768;
-  if (isMobile) {
-    document.querySelectorAll(".plus").forEach(plus => {
-      plus.style.transform = "none";
-      plus.style.transition = "none";
+      const formData = new FormData(form);
+      const variantId = formData.get('id');
+
+      if (!variantId) return;
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('Add to cart failed.');
+          return response.json();
+        })
+        .then(data => {
+          const checkmark = form.querySelector('.add-confirm');
+          checkmark.classList.add('visible');
+          setTimeout(() => {
+            checkmark.classList.remove('visible');
+          }, 3000);
+
+        fetch('/cart.js')
+        .then(res => res.json())
+        .then(cart => {
+          const cartCount = document.getElementById('cart-count');
+          if (cart.item_count > 0) {
+            cartCount.textContent = `(${cart.item_count})`;
+          } else {
+            cartCount.textContent = '';
+          }
+        });
+        })
+        
+        .catch(err => {
+          alert('Could not add to cart. Try again.');
+          console.error(err);
+        });
     });
+  });
 
-    const plusWrapper = document.querySelector(".plus-wrapper");
-    if (plusWrapper) {
-      plusWrapper.querySelectorAll(".plus").forEach(p => {
-        p.addEventListener("mouseenter", e => e.stopPropagation(), true);
-      });
-    }
 
-  }
+  //MOBILE
+  
   
   
 

@@ -4,15 +4,17 @@
         <div class="product-card">
             <div class="product-image">
             <a href="{{ product.url }}">
-                {% assign back = product.images[1] %}
-                <img
+            <img
                 src="{{ product.featured_image | img_url: '800x' }}"
                 alt="{{ product.title }}"
-                class="hover-switch"
-                {% if back %}
-                    data-alt-src="{{ back | img_url: '800x' }}"
-                {% endif %}
+            >
+            {% if product.images[1] %}
+                <img
+                src="{{ product.images[1] | img_url: '800x' }}"
+                alt="{{ product.title }} alternate"
+                class="secondary"
                 >
+            {% endif %}
             </a>
             </div>
 
@@ -47,9 +49,16 @@
                         </button>
                         {% endfor %}
                     </div>
-                    <form method="post" action="/cart/add">
-                        <input type="hidden" name="id" value="" class="variant-id">
-                        <span>[ <button type="submit" class="add-to-cart-link">ADD TO CART</button> ]</span>
+                    <form class="add-to-cart-form" data-product-id="{{ product.id }}">
+                    <input type="hidden" name="id" value="" class="variant-id">
+                    <span>
+                        [ <button type="submit" class="add-to-cart-link">ADD TO CART</button> ]
+                        <span class="add-confirm" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 6L5 9L10 3" stroke="white" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </span>
                     </form>
                 </div>
                 </div>
@@ -58,6 +67,14 @@
         </div>
 
     {% endfor %}
+
+    {% assign remainder = collection.products.size | modulo: 3 %}
+    {% if remainder != 0 %}
+    <div class="go-to-cart-filler" style="--span: {{ 3 | minus: remainder }}">
+        <a href="/cart" class="go-to-cart-link">VIEW CART</a>
+    </div>
+    {% endif %}
+    
   </div>
 </main>
 
