@@ -20,11 +20,13 @@
           </a>        
           <div class="cart-item-details">
             <div class="cart-item-title">
-              <a href="{{ item.url }}">{{ item.product.title }}</a> - SIZE: {{ item.variant.title }}
+              <a href="{{ item.url }}">{{ item.product.title }}</a>
             </div>
-            <div class="desktop product-description">
+            <br>
+            <div class="cart-item-size">SIZE: {{ item.variant.title }}</div>
+            <!--<div class="desktop product-description">
               {{ item.product.description }}
-            </div>
+            </div>-->
             <form method="post" action="/cart/change" class="remove-item-form">
               <input type="hidden" name="id" value="{{ item.key }}">
               <input type="hidden" name="quantity" value="0">
