@@ -1,12 +1,31 @@
 <main class="products-page page-content">
-  {% if collection.products.size == 0 %}
-    <div class="cart-empty-wrapper">
-      <a href="/" class="cart-back-link">❮ BACK TO HOME</a>
-      <p class="cart-empty-message">THERE ARE CURRENTLY NO ITEMS IN THIS COLLECTION.</p>
+
+  <!-- Subnavbar with title and CATEGORIES toggle -->
+  <div class="sub-navbar">
+    <div class="subnav-left"><a href="/">BACK</a></div>
+    <div class="page-title">{{ collection.title }}</div>
+    <div class="subnav-right">
+      <button class="category-toggle underline-hover">CATEGORIES</button>
     </div>
-  {% else %}
-    <div class="product-grid">
-      {% for product in collection.products %}
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="category-filter-bar" style="display: none;">
+    <a href="?filter=all" class="category-filter-link underline-hover">ALL</a>
+    <a href="?filter=shirt" class="category-filter-link underline-hover">SHIRTS</a>
+    <a href="?filter=pants" class="category-filter-link underline-hover">PANTS</a>
+    <a href="?filter=t-shirt" class="category-filter-link underline-hover">T-SHIRTS</a>
+    <a href="?filter=sweater" class="category-filter-link underline-hover">SWEATERS</a>
+    <a href="?filter=jacket" class="category-filter-link underline-hover">JACKETS</a>
+  </div>
+
+  {% assign active_filter = request.query_params.filter | default: 'all' %}
+  {% assign match_count = 0 %}
+
+  <div class="product-grid">
+    {% for product in collection.products %}
+      {% if active_filter == 'all' or product.tags contains active_filter %}
+        {% assign match_count = match_count | plus: 1 %}
         <div class="product-card">
           <div class="product-image">
             {% if product.compare_at_price > product.price %}
@@ -85,14 +104,21 @@
             </div>
           </div>
         </div>
-      {% endfor %}
-
-      {% assign remainder = collection.products.size | modulo: 3 %}
-      {% if remainder != 0 %}
-        <div class="go-to-cart-filler" style="--span: {{ 3 | minus: remainder }}">
-          <a href="/cart" class="go-to-cart-link">VIEW CART</a>
-        </div>
       {% endif %}
+    {% endfor %}
+  </div>
+
+  {% assign remainder = match_count | modulo: 3 %}
+  {% if remainder != 0 %}
+    <div class="go-to-cart-filler" style="--span: {{ 3 | minus: remainder }}">
+      <a href="/cart" class="go-to-cart-link">VIEW CART</a>
+    </div>
+  {% endif %}
+
+  {% if match_count == 0 %}
+    <div class="cart-empty-wrapper">
+      <a href="/" class="cart-back-link">❮ BACK TO HOME</a>
+      <p class="cart-empty-message">THERE ARE CURRENTLY NO ITEMS IN THIS COLLECTION.</p>
     </div>
   {% endif %}
 </main>

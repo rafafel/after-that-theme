@@ -113,6 +113,17 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
+  //CATEGORIES SUBNAVBAR
+  const toggleBtn = document.querySelector('.category-toggle');
+  const filterBar = document.querySelector('.category-filter-bar');
+
+  if (toggleBtn && filterBar) {
+    toggleBtn.addEventListener('click', () => {
+      filterBar.style.display = filterBar.style.display === 'none' ? 'flex' : 'none';
+    });
+  }
+
+
   //second image hover
 
   document.querySelectorAll('.product-image').forEach(wrapper => {
