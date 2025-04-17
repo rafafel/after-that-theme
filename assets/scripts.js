@@ -123,6 +123,41 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  const params = new URLSearchParams(window.location.search);
+  const filter = params.get('filter');
+  const allCards = Array.from(document.querySelectorAll('.product-card'));
+  const filler = document.getElementById('filler');
+  const emptyMsg = document.getElementById('filtered-empty');
+
+  if (filter && filter !== 'all') {
+    let visibleCount = 0;
+
+    allCards.forEach(card => {
+      const tags = card.dataset.tags || '';
+      if (tags.includes(filter.toLowerCase())) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (visibleCount === 0) {
+      if (emptyMsg) emptyMsg.style.display = 'flex';
+      if (filler) filler.style.display = 'none';
+    } else {
+      if (emptyMsg) emptyMsg.style.display = 'none';
+      if (filler) filler.style.display = 'flex';
+    }
+  } else {
+    allCards.forEach(card => card.style.display = 'flex');
+    if (emptyMsg) emptyMsg.style.display = 'none';
+    if (filler) filler.style.display = 'flex';
+  }
+
+
+  
+
 
   //second image hover
 

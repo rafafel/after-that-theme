@@ -1,6 +1,6 @@
 <main class="products-page page-content">
 
-  <!-- Subnavbar with title and CATEGORIES toggle -->
+  <!-- Subnavbar -->
   <div class="sub-navbar">
     <div class="subnav-left"><a href="/">BACK</a></div>
     <div class="page-title">{{ collection.title }}</div>
@@ -11,114 +11,106 @@
 
   <!-- Filter Bar -->
   <div class="category-filter-bar" style="display: none;">
-    <a href="?filter=all" class="category-filter-link underline-hover">ALL</a>
-    <a href="?filter=shirt" class="category-filter-link underline-hover">SHIRTS</a>
-    <a href="?filter=pants" class="category-filter-link underline-hover">PANTS</a>
-    <a href="?filter=t-shirt" class="category-filter-link underline-hover">T-SHIRTS</a>
-    <a href="?filter=sweater" class="category-filter-link underline-hover">SWEATERS</a>
-    <a href="?filter=jacket" class="category-filter-link underline-hover">JACKETS</a>
+    <a href="?filter=all" class="category-filter-link underline-hover" data-filter="all">ALL</a>
+    <a href="?filter=shirt" class="category-filter-link underline-hover" data-filter="shirt">SHIRTS</a>
+    <a href="?filter=pants" class="category-filter-link underline-hover" data-filter="pants">PANTS</a>
+    <a href="?filter=t-shirt" class="category-filter-link underline-hover" data-filter="tshirt">T-SHIRTS</a>
+    <a href="?filter=sweater" class="category-filter-link underline-hover" data-filter="sweater">SWEATERS</a>
+    <a href="?filter=jacket" class="category-filter-link underline-hover" data-filter="jacket">JACKETS</a>
   </div>
-
-  {% assign active_filter = request.query_params.filter | default: 'all' %}
-  {% assign match_count = 0 %}
 
   <div class="product-grid">
     {% for product in collection.products %}
-      {% if active_filter == 'all' or product.tags contains active_filter %}
-        {% assign match_count = match_count | plus: 1 %}
-        <div class="product-card">
-          <div class="product-image">
-            {% if product.compare_at_price > product.price %}
-              <div class="sale-badge">SALE</div>
+      <div class="product-card" data-tags="{{ product.tags | join: ',' | downcase }}">
+        <div class="product-image">
+          {% if product.compare_at_price > product.price %}
+            <div class="sale-badge">SALE</div>
+          {% endif %}
+          <a href="{{ product.url }}">
+            <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}">
+            {% if product.images[1] %}
+              <img src="{{ product.images[1] | img_url: '800x' }}" alt="{{ product.title }} alternate" class="secondary">
             {% endif %}
-            <a href="{{ product.url }}">
-              <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}">
-              {% if product.images[1] %}
-                <img src="{{ product.images[1] | img_url: '800x' }}" alt="{{ product.title }} alternate" class="secondary">
+          </a>
+        </div>
+
+        <div class="product-bar">
+          <div class="product-info-left">
+            <div><span class="label">ITEM:</span></div>
+            <div><span class="label">SIZE:</span></div>
+            <div class="product-price">
+              {% if product.compare_at_price > product.price %}
+                {% assign compare_price = product.compare_at_price | times: 1.0 %}
+                {% assign sale_price = product.price | times: 1.0 %}
+                {% assign discount = compare_price | minus: sale_price %}
+                {% assign percentage = discount | times: 100.0 | divided_by: compare_price | round %}
+                <span class="original-price">{{ product.compare_at_price | money }}</span>
+                <span class="sale-price">{{ product.price | money }}</span>
+                <span class="discount-percentage">({{ percentage }}%)</span>
+              {% else %}
+                <span class="regular-price">{{ product.price | money }}</span>
               {% endif %}
-            </a>
+            </div>
           </div>
 
-          <div class="product-bar">
-            <div class="product-info-left">
-              <div><span class="label">ITEM:</span></div>
-              <div><span class="label">SIZE:</span></div>
-              <div class="product-price">
-                {% if product.compare_at_price > product.price %}
-                  {% assign compare_price = product.compare_at_price | times: 1.0 %}
-                  {% assign sale_price = product.price | times: 1.0 %}
-                  {% assign discount = compare_price | minus: sale_price %}
-                  {% assign percentage = discount | times: 100.0 | divided_by: compare_price | round %}
-
-                  <span class="original-price">{{ product.compare_at_price | money }}</span>
-                  <span class="sale-price">{{ product.price | money }}</span>
-                  <span class="discount-percentage">({{ percentage }}%)</span>
-                {% else %}
-                  <span class="regular-price">{{ product.price | money }}</span>
-                {% endif %}
-              </div>
-            </div>
-
-            <div class="product-info-right">
-              <div class="product-title">{{ product.title | upcase }}</div>
-              <div class="sizes">
-                {% assign selected_set = false %}
-                {% for variant in product.variants %}
-                  {% assign is_available = variant.available %}
-                  {% assign is_selected = false %}
-                  {% if is_available and selected_set == false %}
-                    {% assign is_selected = true %}
-                    {% assign selected_set = true %}
-                  {% endif %}
-                  <button
-                    class="size-button {% if is_selected %}selected{% endif %} {% unless is_available %}sold-out{% endunless %}"
-                    data-variant-id="{{ variant.id }}"
-                    {% unless is_available %}disabled{% endunless %}>
-                    {{ variant.option1 }}
-                  </button>
-                {% endfor %}
-              </div>
-
-              {% assign total_available = 0 %}
+          <div class="product-info-right">
+            <div class="product-title">{{ product.title | upcase }}</div>
+            <div class="sizes">
+              {% assign selected_set = false %}
               {% for variant in product.variants %}
-                {% if variant.available %}
-                  {% assign total_available = total_available | plus: 1 %}
+                {% assign is_available = variant.available %}
+                {% assign is_selected = false %}
+                {% if is_available and selected_set == false %}
+                  {% assign is_selected = true %}
+                  {% assign selected_set = true %}
                 {% endif %}
+                <button
+                  class="size-button {% if is_selected %}selected{% endif %} {% unless is_available %}sold-out{% endunless %}"
+                  data-variant-id="{{ variant.id }}"
+                  {% unless is_available %}disabled{% endunless %}>
+                  {{ variant.option1 }}
+                </button>
               {% endfor %}
-
-              {% if total_available > 0 %}
-                <form class="add-to-cart-form" data-product-id="{{ product.id }}">
-                  <input type="hidden" name="id" value="" class="variant-id">
-                  <span>
-                    <button type="submit" class="add-to-cart-link underline-always">ADD TO CART</button>
-                    <span class="add-confirm" aria-hidden="true">
-                      <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 6L5 9L10 3" stroke="white" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                  </span>
-                </form>
-              {% else %}
-                <div class="sold-out-label">SOLD OUT</div>
-              {% endif %}
             </div>
+
+            {% assign total_available = 0 %}
+            {% for variant in product.variants %}
+              {% if variant.available %}
+                {% assign total_available = total_available | plus: 1 %}
+              {% endif %}
+            {% endfor %}
+
+            {% if total_available > 0 %}
+              <form class="add-to-cart-form" data-product-id="{{ product.id }}">
+                <input type="hidden" name="id" value="" class="variant-id">
+                <span>
+                  <button type="submit" class="add-to-cart-link underline-always">ADD TO CART</button>
+                  <span class="add-confirm" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 6L5 9L10 3" stroke="white" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </span>
+              </form>
+            {% else %}
+              <div class="sold-out-label">SOLD OUT</div>
+            {% endif %}
           </div>
         </div>
-      {% endif %}
+      </div>
     {% endfor %}
-  </div>
 
-  {% assign remainder = match_count | modulo: 3 %}
-  {% if remainder != 0 %}
-    <div class="go-to-cart-filler" style="--span: {{ 3 | minus: remainder }}">
+    <!-- Black filler + View Cart -->
+    <div class="go-to-cart-filler" id="filler" style="background: black;">
       <a href="/cart" class="go-to-cart-link">VIEW CART</a>
     </div>
-  {% endif %}
 
-  {% if match_count == 0 %}
-    <div class="cart-empty-wrapper">
-      <a href="/" class="cart-back-link">❮ BACK TO HOME</a>
-      <p class="cart-empty-message">THERE ARE CURRENTLY NO ITEMS IN THIS COLLECTION.</p>
+  </div>
+
+  <!-- Empty Message (Hidden by default) -->
+    <div class="empty-collection" id="empty-collection" style="display: none;">
+    <a href="/" class="empty-back-link"><span class="arrow">‹</span> BACK TO HOME</a>
+    <div class="empty-message">THERE ARE CURRENTLY NO ITEMS IN THIS COLLECTION.</div>
     </div>
-  {% endif %}
+
 </main>

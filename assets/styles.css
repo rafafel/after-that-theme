@@ -520,17 +520,19 @@ a{
   }
 
   .go-to-cart-filler {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: calc(100vw / 3 * var(--span));
+    flex-grow: 1; /* NEW */
+    width: auto !important; /* override previous width */
     height: calc(100vh - var(--navbar-offset));
     background: black;
     color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-transform: uppercase;
     font-size: 12px;
     letter-spacing: 0.5px;
   }
+  
   
   .go-to-cart-link {
     border: 1px solid white;
