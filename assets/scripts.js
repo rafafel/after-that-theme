@@ -245,6 +245,69 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  //INTRO LANDING
+  const introScreen = document.getElementById('intro-screen');
+
+  // Exit immediately if intro screen doesn't exist on this page
+  if (!introScreen) return;
+
+  // Only run the intro animation if not already shown this session
+  if (sessionStorage.getItem('introShown')) {
+    // Skip intro: just remove the screen immediately
+    introScreen.remove();
+    // Show elements immediately
+    const navbar = document.querySelector('.landing .navbar');
+const navWrapper = document.querySelector('.landing .nav-wrapper');
+const plusWrapper = document.querySelector('.landing .plus-wrapper');
+
+// Immediately show, no transition
+navbar.style.transition = 'none';
+navWrapper.style.transition = 'none';
+plusWrapper.style.transition = 'none';
+
+navbar.style.opacity = '1';
+navWrapper.style.opacity = '1';
+plusWrapper.style.opacity = '1';
+    document.querySelector('.landing .nav-wrapper').style.opacity = '1';
+    document.querySelector('.landing .plus-wrapper').style.opacity = '1';
+    return;
+  }
+
+  // Mark intro as shown for this session
+  sessionStorage.setItem('introShown', 'true');
+
+  const video = document.querySelector('.landing-video-bg');
+  const blurOverlay = document.getElementById('blur-overlay');
+  const logoOverlay = document.getElementById('logo-overlay');
+  const navbar = document.querySelector('.landing .navbar');
+  const navWrapper = document.querySelector('.landing .nav-wrapper');
+  const plusWrapper = document.querySelector('.landing .plus-wrapper');
+
+  const startAnimation = () => {
+    introScreen.style.opacity = '1';
+
+    setTimeout(() => {
+      blurOverlay.style.backdropFilter = 'blur(0px)';
+      logoOverlay.style.filter = 'blur(30px)';
+      logoOverlay.style.opacity = '0';
+
+      navbar.style.opacity = '1';
+      navWrapper.style.opacity = '1';
+      plusWrapper.style.opacity = '1';
+    }, 1000);
+
+    setTimeout(() => {
+      introScreen.remove();
+    }, 3600);
+  };
+
+  // wait for video to be ready before triggering animation
+  if (video.readyState >= 2) {
+    startAnimation();
+  } else {
+    video.addEventListener('loadeddata', startAnimation, { once: true });
+  }
+
 
   //MOBILE
   

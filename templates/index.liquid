@@ -1,10 +1,16 @@
 {% layout 'theme' %}
 
 <div class="landing">
-  <video class="desktop landing-video-bg" autoplay muted loop playsinline>
-    <source src="https://cdn.shopify.com/videos/c/o/v/5684633ec0524205b12a44b3c978325c.mp4" type="video/mp4">
-  </video>
-<img class="mobile landing-video-bg" src="https://cdn.shopify.com/s/files/1/0623/6451/6470/files/BG_screenshot.jpg?v=1743263419" alt="Mobile Landing Background"> 
+  <div class="landing-visuals">
+    <div class="video-wrapper">
+      <video class="desktop landing-video-bg" autoplay muted loop playsinline>
+        <source src="https://cdn.shopify.com/videos/c/o/v/5684633ec0524205b12a44b3c978325c.mp4" type="video/mp4">
+      </video>
+    </div>
+    <img class="mobile landing-video-bg" src="https://cdn.shopify.com/s/files/1/0623/6451/6470/files/BG_screenshot.jpg?v=1743263419" alt="Mobile Landing Background"> 
+  </div>
+  
+  <img class="mobile landing-video-bg" src="https://cdn.shopify.com/s/files/1/0623/6451/6470/files/BG_screenshot.jpg?v=1743263419" alt="Mobile Landing Background"> 
 
     <!-- Decorative plus signs -->
     <div class="plus-wrapper">
@@ -16,9 +22,15 @@
     
   <!-- Navigation links -->
     <div class="nav-wrapper">
-      <a href="/collections/shop-all" class="nav-link nav-top-left">SHOP ALL</a>
-      <a href="/collections/new-collection" class="nav-link nav-top-right">NEW COLLECTION</a>
-      <a href="/collections/sale" class="nav-link nav-bottom-left">SALE</a>
-      <a href="https://www.instagram.com/afterthat135/" target="_blank" class="nav-link nav-bottom-right">INSTAGRAM</a>
+      <a href="/collections/shop-all" class="nav-link nav-top-left underline-hover">SHOP ALL</a>
+      <a href="/collections/new-collection" class="nav-link nav-top-right underline-hover">NEW COLLECTION</a>
+      <a href="/collections/sale" class="nav-link nav-bottom-left underline-hover">SALE</a>
+      <a href="https://www.instagram.com/afterthat135/" target="_blank" class="nav-link nav-bottom-right underline-hover">INSTAGRAM</a>
     </div>
+
+  <!-- INTRO -->
+    <div id="intro-screen">
+      <div id="blur-overlay"></div>
+      <img id="logo-overlay" src="https://cdn.shopify.com/s/files/1/0623/6451/6470/files/AFTERTHAT_MONOGRAM_white.png?v=1744742121" alt="Logo">
+    </div>    
 </div>
