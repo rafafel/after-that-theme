@@ -119,10 +119,6 @@ a{
     font-size: 12px;
   }
   
-  .navbar-left .logo {
-    letter-spacing: 2px;
-  }
-  
   .navbar-right a {
     text-decoration: none;
     margin-left: 60px;
@@ -1106,12 +1102,21 @@ a{
 
     .navbar-right a{
       margin: 0;
-      padding-left: 10px;
+      padding-left: 15px;
+      font-size: 11px;
+
     }
 
     .nav-wrapper a{
-      font-size: 10px;
+      font-size: 11px;
     }
+
+    .logo img {
+      height: 11px;
+      display: block;
+      margin-top: 2px;
+    }
+
 
     .plus {
       font-size: 14px;
