@@ -55,6 +55,10 @@ a{
   font-weight: 700;
 }
 
+button{
+  font-weight: 700;
+}
+
 .underline-always {
   position: relative;
   display: inline-block;
@@ -322,7 +326,6 @@ a{
     position: fixed;
     top: 70px; /* navbar (40) + subnavbar (30) */
     width: 100%;
-    height: 30px;
     background: white;
     display: flex;
     justify-content: center;
@@ -331,9 +334,7 @@ a{
     font-size: 12px;
     z-index: 9;
     text-transform: uppercase;
-    padding: 0 20px;
-    border-top: 1px solid #43494E;
-    border-bottom: 1px solid #43494E;
+    padding: 10px;
     z-index: 999;
   }
   
@@ -1095,7 +1096,7 @@ a{
   @media screen and (max-width: 768px) {
 
 
-    p, a, h1, h2, .product-page .product-title, .product-page .product-price, .add-to-cart-link, .size-button{
+    p, a, h1, h2, .product-page .product-title, .product-page .product-price, .add-to-cart-link, .size-button, .category-toggle{
       font-size: 10px;
     }
 

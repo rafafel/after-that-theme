@@ -1,6 +1,23 @@
 console.log("scripts.js is running");
 
 document.addEventListener('DOMContentLoaded', function () {
+  // Store source page before navigating to a filter
+  document.querySelectorAll('.category-filter-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const filter = link.dataset.filter;
+      const basePath = window.location.pathname;
+      const newUrl = `${basePath}?filter=${filter}`;
+      window.location.href = newUrl; // <-- forces real navigation
+    });
+  });
+
+  const backLink = document.querySelector('.subnav-left a');
+  if (backLink && sessionStorage.getItem('cameFromShopAll')) {
+  backLink.setAttribute('href', '/collections/shop-all');
+  sessionStorage.removeItem('cameFromShopAll');
+  }
+
   const productCards = document.querySelectorAll('.product-card');
 
   productCards.forEach((card) => {
@@ -154,6 +171,24 @@ document.addEventListener('DOMContentLoaded', function () {
     if (emptyMsg) emptyMsg.style.display = 'none';
     if (filler) filler.style.display = 'flex';
   }
+
+    // Force filter bar open if a filter is active
+    const categoryFilterBar = document.querySelector('.category-filter-bar');
+    if (filter && filter !== 'all' && categoryFilterBar) {
+      categoryFilterBar.style.display = 'flex';
+    }
+
+    // Highlight active category link
+    const currentFilter = new URLSearchParams(window.location.search).get('filter');
+    if (currentFilter) {
+      const activeLink = document.querySelector(`.category-filter-bar a[data-filter="${currentFilter}"]`);
+      if (activeLink) {
+        activeLink.classList.remove('underline-hover');
+        activeLink.classList.add('underline-always');
+      }
+    }
+    
+
 
 
   
