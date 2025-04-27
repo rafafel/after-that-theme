@@ -22,5 +22,18 @@
     {{ content_for_layout }}
 
 
+    <!-- FOOTER -->
+    {% if template.name contains 'product' or template.name contains 'collection' %}
+      <footer class="afterthat-footer">
+        <div class="footer-content">
+            <span>Afterthat135 © All rights reserved 2025</span> ·
+            <a href="/policies/terms-of-service" class="footer-link">Terms and Conditions</a> ·
+            <a href="/policies/privacy-policy" class="footer-link">Privacy Policy</a>
+        </div>
+      </footer>
+    {% endif %}
+
+
+
   </body>
 </html>

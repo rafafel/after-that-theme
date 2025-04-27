@@ -4,44 +4,79 @@
   <div class="product-main">
 
     <div class="product-main-info">
-      <h1 class="product-title">[ {{ product.title | upcase }} ]</h1>
+      <h1 class="product-title">{{ product.title | upcase }}</h1>
       <div class="product-description">
         {{ product.description }}
-      </div>      
-      <div class="product-price">{{ product.price | money }}</div>
+      </div>
 
-      <form method="post" action="/cart/add">
+      {%- if product.compare_at_price > product.price -%}
+        {%- assign compare_price = product.compare_at_price | times: 1.0 -%}
+        {%- assign sale_price   = product.price           | times: 1.0 -%}
+        {%- assign discount     = compare_price            | minus: sale_price -%}
+        {%- assign percentage   = discount                 | times: 100.0 | divided_by: compare_price | round -%}
+        <div class="product-price">
+          <span class="original-price">{{ product.compare_at_price | money }}</span>
+          <span class="sale-price">   {{ product.price            | money }}</span>
+          <span class="discount-percentage">({{ percentage }}%)</span>
+        </div>
+      {%- else -%}
+        <div class="product-price">{{ product.price | money }}</div>
+      {%- endif -%}
+
+      {% assign total_available = 0 %}
+      {% for v in product.variants %}
+        {% if v.available %}
+          {% assign total_available = total_available | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+
+      <form class="add-to-cart-form" data-product-id="{{ product.id }}">
         <div class="product-options">
           {% assign selected_set = false %}
-          {% for variant in product.variants %}
-            {% assign is_available = variant.available %}
-            {% assign is_selected = false %}
+          {% for v in product.variants %}
+            {% assign is_available = v.available %}
+            {% assign is_selected  = false %}
             {% if is_available and selected_set == false %}
               {% assign is_selected = true %}
-              {% assign selected_set = true %}
+              {% assign selected_set  = true %}
             {% endif %}
             <button
               class="size-button {% if is_selected %}selected{% endif %} {% unless is_available %}sold-out{% endunless %}"
-              data-variant-id="{{ variant.id }}"
-              {% unless is_available %}disabled{% endunless %}
-            >
-              {{ variant.option1 }}
+              data-variant-id="{{ v.id }}"
+              {% unless is_available %}disabled{% endunless %}>
+              {{ v.option1 }}
             </button>
           {% endfor %}
         </div>
-        <input type="hidden" name="id" value="" class="variant-id">
-        <button type="submit" class="add-to-cart-link">[ ADD TO CART ]</button>
+
+        {% if total_available > 0 %}
+          <input type="hidden" name="id" value="" class="variant-id">
+          <div class="add-to-cart-wrapper">
+            <button type="submit" class="add-to-cart-link underline-always">ADD TO CART</button>
+            <span class="add-confirm" aria-hidden="true">…✔︎…</span>
+          </div>
+        {% else %}
+          <span class="sold-out-label">SOLD OUT</span>
+        {% endif %}
       </form>
     </div>
 
     <div class="product-main-image carousel">
-        <button class="carousel-btn prev">&#10094;</button>
-        <div class="carousel-images">
-          {% for image in product.images %}
-            <img src="{{ image | img_url: '1200x' }}" alt="{{ product.title }} image {{ forloop.index }}" class="carousel-image {% if forloop.first %}active{% endif %}">
-          {% endfor %}
-        </div>
-        <button class="carousel-btn next">&#10095;</button>
+      {%- if product.compare_at_price > product.price -%}
+        <div class="sale-badge">SALE</div>
+      {%- endif -%}
+
+      <button class="carousel-btn prev">&#10094;</button>
+      <div class="carousel-images">
+        {% for image in product.images %}
+          <img
+            src="{{ image | img_url: '1200x' }}"
+            alt="{{ product.title }} image {{ forloop.index }}"
+            class="carousel-image {% if forloop.first %}active{% endif %}">
+        {% endfor %}
       </div>
-      
+      <button class="carousel-btn next">&#10095;</button>
+    </div>
+
+  </div>
 </main>

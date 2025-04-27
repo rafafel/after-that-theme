@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const backLink = document.querySelector('.subnav-left a');
   if (backLink && sessionStorage.getItem('cameFromShopAll')) {
-  backLink.setAttribute('href', '/collections/shop-all');
-  sessionStorage.removeItem('cameFromShopAll');
+    backLink.setAttribute('href', '/collections/shop-all');
+    sessionStorage.removeItem('cameFromShopAll');
   }
 
   const productCards = document.querySelectorAll('.product-card');
@@ -59,7 +59,60 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // PRODUCT PAGE size selection handling
+  const productPageForm = document.querySelector('.product-page form');
+  if (productPageForm) {
+    const sizeButtons = productPageForm.querySelectorAll('.size-button');
+    const hiddenInput = productPageForm.querySelector('.variant-id');
   
+    sizeButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault(); // prevent form submission
+        // remove 'selected' from all buttons
+        sizeButtons.forEach(btn => btn.classList.remove('selected'));
+        // add 'selected' to clicked button
+        button.classList.add('selected');
+        // update hidden input value
+        hiddenInput.value = button.dataset.variantId;
+      });
+    });
+  
+    // Pre-select the default selected one if exists
+    const preselected = productPageForm.querySelector('.size-button.selected');
+    if (preselected) {
+      hiddenInput.value = preselected.dataset.variantId;
+    }
+  }
+
+// If there's only one global add-to-cart form (i.e. on the product page), run the same logic:
+const singleForm = document.querySelector('.product-page .add-to-cart-form');
+if (singleForm) {
+  const addBtn = singleForm.querySelector('.add-to-cart-link');
+  const addConfirm = singleForm.querySelector('.add-confirm');
+  const variantIdInput = singleForm.querySelector('.variant-id');
+
+  singleForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const variantId = variantIdInput.value;
+    if (!variantId) return;
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: variantId, quantity: 1 })
+    }).then(res => {
+      if (res.ok) {
+        addConfirm?.classList.add('visible');
+        setTimeout(() => {
+          addBtn.textContent = 'ADD TO CART';
+          addConfirm?.classList.remove('visible');
+        }, 2000);
+      }
+    }).catch(err => console.error(err));
+  });
+}
+
 
   // NAVBAR OFFSET
     function updateOffsetVar() {
@@ -131,68 +184,103 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   //CATEGORIES SUBNAVBAR
-  const toggleBtn = document.querySelector('.category-toggle');
-  const filterBar = document.querySelector('.category-filter-bar');
+  const toggleBtn2 = document.querySelector('.category-toggle');
+  const filterBar2 = document.querySelector('.category-filter-bar');
 
-  if (toggleBtn && filterBar) {
-    toggleBtn.addEventListener('click', () => {
-      filterBar.style.display = filterBar.style.display === 'none' ? 'flex' : 'none';
+  if (toggleBtn2 && filterBar2) {
+    toggleBtn2.addEventListener('click', () => {
+      filterBar2.style.display = filterBar2.style.display === 'none' ? 'flex' : 'none';
     });
   }
 
-  const params = new URLSearchParams(window.location.search);
-  const filter = params.get('filter');
-  const allCards = Array.from(document.querySelectorAll('.product-card'));
-  const filler = document.getElementById('filler');
-  const emptyMsg = document.getElementById('filtered-empty');
+  const params2 = new URLSearchParams(window.location.search);
+  const filter2 = params2.get('filter');
+  const allCards2 = Array.from(document.querySelectorAll('.product-card'));
+  const filler2 = document.getElementById('filler');
+  const emptyMsg2 = document.getElementById('filtered-empty');
 
-  if (filter && filter !== 'all') {
-    let visibleCount = 0;
-
-    allCards.forEach(card => {
+  if (filter2 && filter2 !== 'all') {
+    let visibleCount2 = 0;
+    allCards2.forEach(card => {
       const tags = card.dataset.tags || '';
-      if (tags.includes(filter.toLowerCase())) {
+      if (tags.includes(filter2.toLowerCase())) {
         card.style.display = 'flex';
-        visibleCount++;
+        visibleCount2++;
       } else {
         card.style.display = 'none';
       }
     });
 
-    if (visibleCount === 0) {
-      if (emptyMsg) emptyMsg.style.display = 'flex';
-      if (filler) filler.style.display = 'none';
+    // only show filler when the last row isn’t full
+    if (visibleCount2 === 0) {
+      if (emptyMsg2) emptyMsg2.style.display = 'flex';
+      if (filler2)    filler2.style.display = 'none';
     } else {
-      if (emptyMsg) emptyMsg.style.display = 'none';
-      if (filler) filler.style.display = 'flex';
-    }
-  } else {
-    allCards.forEach(card => card.style.display = 'flex');
-    if (emptyMsg) emptyMsg.style.display = 'none';
-    if (filler) filler.style.display = 'flex';
-  }
-
-    // Force filter bar open if a filter is active
-    const categoryFilterBar = document.querySelector('.category-filter-bar');
-    if (filter && filter !== 'all' && categoryFilterBar) {
-      categoryFilterBar.style.display = 'flex';
-    }
-
-    // Highlight active category link
-    const currentFilter = new URLSearchParams(window.location.search).get('filter');
-    if (currentFilter) {
-      const activeLink = document.querySelector(`.category-filter-bar a[data-filter="${currentFilter}"]`);
-      if (activeLink) {
-        activeLink.classList.remove('underline-hover');
-        activeLink.classList.add('underline-always');
+      if (emptyMsg2) emptyMsg2.style.display = 'none';
+      if (filler2) {
+        if (visibleCount2 % 3 !== 0) {
+          filler2.style.display = 'flex';
+        } else {
+          filler2.style.display = 'none';
+        }
       }
     }
-    
+  } else {
+    // no filter → show everything
+    allCards2.forEach(card => card.style.display = 'flex');
+    if (emptyMsg2) emptyMsg2.style.display = 'none';
+    if (filler2) {
+      // only show filler when total count % 3 !== 0
+      if (allCards2.length % 3 !== 0) {
+        filler2.style.display = 'flex';
+      } else {
+        filler2.style.display = 'none';
+      }
+    }
+  }
 
 
+  // Force filter bar open & underline the active link
+  const categoryFilterBar2 = document.querySelector('.category-filter-bar');
+  if (filter2 && filter2 !== 'all' && categoryFilterBar2) {
+    categoryFilterBar2.style.display = 'flex';
+    const activeLink2 = categoryFilterBar2.querySelector(`a[data-filter="${filter2}"]`);
+    if (activeLink2) {
+    activeLink2.classList.remove('underline-hover', 'underline-always');
+    activeLink2.classList.add('selected');
+    }
+  }
 
-  
 
+  // no filtered items
+  const grid = document.querySelector('.product-grid');
+  const emptyPanel = document.getElementById('filtered-empty');
+  const cards = Array.from(document.querySelectorAll('.product-card'));
+  document.querySelectorAll('.category-filter-link').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const filter = link.dataset.filter;
+      // count how many match
+      let matched = 0;
+      cards.forEach(card => {
+        const tags = (card.dataset.tags||'').split(',');
+        if (tags.includes(filter)) {
+          card.style.display = 'flex';
+          matched++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      // if none, hide grid & show our panel
+      if (matched === 0) {
+        grid.style.display = 'none';
+        emptyPanel.style.display = 'flex';
+      } else {
+        grid.style.display = 'flex';
+        emptyPanel.style.display = 'none';
+      }
+    });
+  });
 
   //second image hover
 
@@ -360,9 +448,9 @@ plusWrapper.style.opacity = '1';
   const video = document.querySelector('.landing-video-bg');
   const blurOverlay = document.getElementById('blur-overlay');
   const logoOverlay = document.getElementById('logo-overlay');
-  const navbar = document.querySelector('.landing .navbar');
-  const navWrapper = document.querySelector('.landing .nav-wrapper');
-  const plusWrapper = document.querySelector('.landing .plus-wrapper');
+  const navbar2 = document.querySelector('.landing .navbar');
+  const navWrapper2 = document.querySelector('.landing .nav-wrapper');
+  const plusWrapper2 = document.querySelector('.landing .plus-wrapper');
 
   const startAnimation = () => {
     introScreen.style.opacity = '1';
@@ -372,9 +460,9 @@ plusWrapper.style.opacity = '1';
       logoOverlay.style.filter = 'blur(30px)';
       logoOverlay.style.opacity = '0';
 
-      navbar.style.opacity = '1';
-      navWrapper.style.opacity = '1';
-      plusWrapper.style.opacity = '1';
+      navbar2.style.opacity = '1';
+      navWrapper2.style.opacity = '1';
+      plusWrapper2.style.opacity = '1';
     }, 1000);
 
     setTimeout(() => {
@@ -389,12 +477,9 @@ plusWrapper.style.opacity = '1';
     video.addEventListener('loadeddata', startAnimation, { once: true });
   }
 
-
   //MOBILE
-  
-  
-  
-
+    
+    
 
 
 });
