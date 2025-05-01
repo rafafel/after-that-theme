@@ -1,16 +1,6 @@
 console.log("scripts.js is running");
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Store source page before navigating to a filter
-  document.querySelectorAll('.category-filter-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const filter = link.dataset.filter;
-      const basePath = window.location.pathname;
-      const newUrl = `${basePath}?filter=${filter}`;
-      window.location.href = newUrl; // <-- forces real navigation
-    });
-  });
 
   const backLink = document.querySelector('.subnav-left a');
   if (backLink && sessionStorage.getItem('cameFromShopAll')) {
@@ -184,103 +174,58 @@ if (singleForm) {
 
 
   //CATEGORIES SUBNAVBAR
-  const toggleBtn2 = document.querySelector('.category-toggle');
-  const filterBar2 = document.querySelector('.category-filter-bar');
+  // CATEGORIES FILTER (toggleable)
+const toggleBtn = document.querySelector('.category-toggle');
+const filterBar = document.querySelector('.category-filter-bar');
+const filterLinks = document.querySelectorAll('.category-filter-link');
+const products = Array.from(document.querySelectorAll('.product-card'));
+const productGrid = document.querySelector('.product-grid');
+const emptyState = document.getElementById('filtered-empty');
+const filler = document.getElementById('filler');
 
-  if (toggleBtn2 && filterBar2) {
-    toggleBtn2.addEventListener('click', () => {
-      filterBar2.style.display = filterBar2.style.display === 'none' ? 'flex' : 'none';
-    });
-  }
-
-  const params2 = new URLSearchParams(window.location.search);
-  const filter2 = params2.get('filter');
-  const allCards2 = Array.from(document.querySelectorAll('.product-card'));
-  const filler2 = document.getElementById('filler');
-  const emptyMsg2 = document.getElementById('filtered-empty');
-
-  if (filter2 && filter2 !== 'all') {
-    let visibleCount2 = 0;
-    allCards2.forEach(card => {
-      const tags = card.dataset.tags || '';
-      if (tags.includes(filter2.toLowerCase())) {
-        card.style.display = 'flex';
-        visibleCount2++;
-      } else {
-        card.style.display = 'none';
-      }
-    });
-
-    // only show filler when the last row isn’t full
-    if (visibleCount2 === 0) {
-      if (emptyMsg2) emptyMsg2.style.display = 'flex';
-      if (filler2)    filler2.style.display = 'none';
-    } else {
-      if (emptyMsg2) emptyMsg2.style.display = 'none';
-      if (filler2) {
-        if (visibleCount2 % 3 !== 0) {
-          filler2.style.display = 'flex';
-        } else {
-          filler2.style.display = 'none';
-        }
-      }
-    }
-  } else {
-    // no filter → show everything
-    allCards2.forEach(card => card.style.display = 'flex');
-    if (emptyMsg2) emptyMsg2.style.display = 'none';
-    if (filler2) {
-      // only show filler when total count % 3 !== 0
-      if (allCards2.length % 3 !== 0) {
-        filler2.style.display = 'flex';
-      } else {
-        filler2.style.display = 'none';
-      }
-    }
-  }
-
-
-  // Force filter bar open & underline the active link
-  const categoryFilterBar2 = document.querySelector('.category-filter-bar');
-  if (filter2 && filter2 !== 'all' && categoryFilterBar2) {
-    categoryFilterBar2.style.display = 'flex';
-    const activeLink2 = categoryFilterBar2.querySelector(`a[data-filter="${filter2}"]`);
-    if (activeLink2) {
-    activeLink2.classList.remove('underline-hover', 'underline-always');
-    activeLink2.classList.add('selected');
-    }
-  }
-
-
-  // no filtered items
-  const grid = document.querySelector('.product-grid');
-  const emptyPanel = document.getElementById('filtered-empty');
-  const cards = Array.from(document.querySelectorAll('.product-card'));
-  document.querySelectorAll('.category-filter-link').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const filter = link.dataset.filter;
-      // count how many match
-      let matched = 0;
-      cards.forEach(card => {
-        const tags = (card.dataset.tags||'').split(',');
-        if (tags.includes(filter)) {
-          card.style.display = 'flex';
-          matched++;
-        } else {
-          card.style.display = 'none';
-        }
-      });
-      // if none, hide grid & show our panel
-      if (matched === 0) {
-        grid.style.display = 'none';
-        emptyPanel.style.display = 'flex';
-      } else {
-        grid.style.display = 'flex';
-        emptyPanel.style.display = 'none';
-      }
-    });
+// Show/hide filter bar
+if (toggleBtn && filterBar) {
+  toggleBtn.addEventListener('click', () => {
+    filterBar.style.display = filterBar.style.display === 'flex' ? 'none' : 'flex';
   });
+}
+
+filterLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const filter = link.dataset.filter;
+    const wasActive = link.classList.contains('selected');
+
+    // Clear all selections
+    filterLinks.forEach(l => l.classList.remove('selected'));
+
+    // If it wasn’t active, activate this one
+    const activeFilter = !wasActive ? filter : null;
+    if (activeFilter) link.classList.add('selected');
+
+    // Filter products
+    let anyVisible = false;
+    products.forEach(card => {
+      const tags = (card.dataset.tags || '').split(',');
+      const keep = !activeFilter || tags.includes(activeFilter);
+      card.style.display = keep ? '' : 'none';
+      if (keep) anyVisible = true;
+    });
+
+    // Show empty state if nothing matches
+    if (activeFilter && !anyVisible) {
+      productGrid.style.display = 'none';
+      emptyState.style.display = 'flex';
+      filler.style.display = 'none';
+    } else {
+      productGrid.style.display = 'flex';
+      emptyState.style.display = 'none';
+      // Show filler only when there are visible products
+      filler.style.display = anyVisible ? 'flex' : 'none';
+    }
+  });
+});
+
 
   //second image hover
 
@@ -369,6 +314,69 @@ if (singleForm) {
   });
 
 
+  // ─── AJAX qty‐change with sync’d buttons + nav count ───────────────────────────
+;(function(){
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('button.qty-btn');
+    if (!btn) return;           // only our +/– buttons
+    e.preventDefault();
+
+    const form = btn.closest('form.cart-qty-form');
+    const id   = form.querySelector('input[name="id"]').value;
+    const wantedQty = parseInt(btn.value, 10);
+
+    fetch('/cart/change.js', {
+      method:  'POST',
+      headers: {
+        'Content-Type':      'application/x-www-form-urlencoded',
+        'Accept':            'application/json'
+      },
+      body: new URLSearchParams({ id, quantity: wantedQty }).toString()
+    })
+    .then(r => r.json())
+    .then(cart => {
+      // find updated line
+      const item = cart.items.find(i => i.key === id);
+      const row  = document.querySelector(`.cart-item[data-key="${id}"]`);
+
+      if (row) {
+        if (item) {
+          const newQty = item.quantity;
+          // 1) qty bubble
+          row.querySelector('.cart-qty').textContent = newQty;
+          // 2) line‐price
+          row.querySelector('.cart-item-price').textContent =
+            new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'})
+            .format(item.line_price/100);
+          // 3) re-sync button values
+          const [dec, inc] = row.querySelectorAll('button.qty-btn');
+          dec.value = newQty - 1;
+          inc.value = newQty + 1;
+        } else {
+          // removed entirely
+          row.remove();
+        }
+      }
+
+      // update cart total
+      const totalEl = document.querySelector('.cart-total');
+      if (totalEl) {
+        totalEl.textContent =
+          'Total: ' + new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'})
+          .format(cart.total_price/100);
+      }
+
+      // update navbar count badge
+      const navCount = document.getElementById('cart-count');
+      if (navCount) navCount.textContent = `(${cart.item_count})`;
+    })
+    .catch(err => console.error('Cart AJAX failed:', err));
+  });
+})();
+
+
+  
+
   //ADD TO CART CONFIRM CHECK
   document.querySelectorAll('.add-to-cart-form').forEach(form => {
     form.addEventListener('submit', function (e) {
@@ -446,7 +454,6 @@ plusWrapper.style.opacity = '1';
   sessionStorage.setItem('introShown', 'true');
 
   const video = document.querySelector('.landing-video-bg');
-  const blurOverlay = document.getElementById('blur-overlay');
   const logoOverlay = document.getElementById('logo-overlay');
   const navbar2 = document.querySelector('.landing .navbar');
   const navWrapper2 = document.querySelector('.landing .nav-wrapper');
@@ -456,7 +463,6 @@ plusWrapper.style.opacity = '1';
     introScreen.style.opacity = '1';
 
     setTimeout(() => {
-      blurOverlay.style.backdropFilter = 'blur(0px)';
       logoOverlay.style.filter = 'blur(30px)';
       logoOverlay.style.opacity = '0';
 
@@ -476,6 +482,9 @@ plusWrapper.style.opacity = '1';
   } else {
     video.addEventListener('loadeddata', startAnimation, { once: true });
   }
+
+
+  
 
   //MOBILE
     

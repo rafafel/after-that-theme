@@ -15,7 +15,7 @@
   <div class="cart-wrapper">
     <ul class="cart-items">
       {% for item in cart.items %}
-        <li class="cart-item">
+        <li class="cart-item" data-key="{{ item.key }}">
           <a href="{{ item.url }}" class="cart-item-thumbnail">
             <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.product.title }}">
           </a>        
@@ -34,15 +34,16 @@
               <!--<button type="submit" class="remove-item">REMOVE</button>-->
             </form>            
           </div>
+          
           <div class="cart-item-price-qty">
             <div class="cart-item-price">{{ item.line_price | money }}</div>
             <div class="cart-qty-wrapper">
               
               <form method="post" action="/cart/change" class="cart-qty-form">
                 <input type="hidden" name="id" value="{{ item.key }}">
-                <button type="submit" name="quantity" value="{{ item.quantity | minus: 1 }}" class="qty-btn">–</button>
+                <button type="button" name="quantity" value="{{ item.quantity | minus: 1 }}" class="qty-btn">–</button>
                 <span class="cart-qty">{{ item.quantity }}</span>
-                <button type="submit" name="quantity" value="{{ item.quantity | plus: 1 }}" class="qty-btn">+</button>
+                <button type="button" name="quantity" value="{{ item.quantity | plus: 1 }}" class="qty-btn">+</button>
               </form>
             </div>
           </div>
@@ -53,6 +54,11 @@
     <div class="cart-summary">
       <div class="cart-total">Total: {{ cart.total_price | money }}</div>
       <a href="/checkout" class="checkout-link">Checkout</a>
+    </div>
+    <div class="cart-summary-footer">
+      <span>© AFTERTHAT / ALL RIGHTS RESERVED</span> &middot;
+      <a href="/policies/terms-of-service" class="footer-link">Terms and Conditions</a> &middot;
+      <a href="/policies/privacy-policy" class="footer-link">Privacy Policy</a>
     </div>
     
   </div>  
