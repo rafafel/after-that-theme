@@ -110,6 +110,22 @@ if (singleForm) {
 }
 
 
+  //SAFARI VIDEO AUTOPLAY
+  document.querySelectorAll('.landing-video-bg').forEach(function(video) {
+    video.setAttribute('preload', 'auto');
+    video.load();
+    var playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(function() {
+        video.addEventListener('canplay', function handler() {
+          video.play();
+          video.removeEventListener('canplay', handler);
+        });
+      });
+    }
+  });
+
+
   // NAVBAR OFFSET
     function updateOffsetVar() {
       const navbar = document.querySelector('.navbar');
