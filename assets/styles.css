@@ -1274,10 +1274,8 @@ button{
     }
 
     a:focus,
-    a:hover,
     a:active,
     button:focus,
-    button:hover,
     button:active {
       outline: none !important;
       color: inherit !important;
