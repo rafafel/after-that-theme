@@ -1387,7 +1387,7 @@ button{
 
     .category-filter-bar{
       gap: 0px;
-      justify-content: space-around;
+      justify-content: space-between;
     }
 
 
