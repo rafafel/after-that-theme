@@ -500,64 +500,71 @@ plusWrapper.style.opacity = '1';
 
   //MOBILE
     
-  //IMG SWIPE
-  if (window.innerWidth <= 768) {
-    // give containers a hint for vertical scroll
-    const style = document.createElement('style');
-    style.textContent = `
-      .product-card .product-image,
-      .product-page .carousel-images {
-        touch-action: pan-y;
-        -ms-touch-action: pan-y;
-      }
-    `;
-    document.head.append(style);
-  
-    // shared swipe detection
-    let xStart = null, yStart = null;
-    function handleTouchStart(e) {
-      const t = e.touches[0];
-      xStart = t.clientX;
-      yStart = t.clientY;
-    }
-    function handleTouchEnd(e, onLeft, onRight) {
-      if (xStart === null || yStart === null) return;
-      const t = e.changedTouches[0];
-      const xEnd = t.clientX, yEnd = t.clientY;
-      const xDiff = xStart - xEnd, yDiff = yStart - yEnd;
-      // horizontal swipe if |x| > |y| and exceeds threshold
-      if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 30) {
-        xDiff > 0 ? onLeft() : onRight();
-      }
-      xStart = yStart = null;
-    }
-  
-    // 1) Collection-page cards
-    document.querySelectorAll('.product-card .product-image').forEach(card => {
-      card.addEventListener('touchstart', handleTouchStart, { passive: true });
-      card.addEventListener('touchend', e => {
-        const altImg = card.querySelector('img.secondary');
-        if (!altImg) return;
-        handleTouchEnd(e,
-          () => altImg.classList.add('visible'),   // swipe left
-          () => altImg.classList.remove('visible') // swipe right
-        );
+  // ─── MOBILE-ONLY SWIPE FOR COLLECTION CARDS & PRODUCT CAROUSEL ───
+;(function(){
+  // detect touch devices only
+  if (!window.matchMedia("(pointer: coarse)").matches) return;
+
+  // 1) COLLECTION PAGE: swipe on each .product-image to toggle the secondary image
+  document
+    .querySelectorAll(".product-card .product-image")
+    .forEach(container => {
+      let startX = 0;
+      const THRESH = 30; // px
+
+      container.addEventListener("touchstart", e => {
+        startX = e.touches[0].clientX;
       }, { passive: true });
-    });
-  
-    // 2) Product-page carousel
-    document.querySelectorAll('.product-page .carousel-images').forEach(car => {
-      car.addEventListener('touchstart', handleTouchStart, { passive: true });
-      car.addEventListener('touchend', e => {
-        const nextBtn = document.querySelector('.product-page .carousel-btn.next');
-        const prevBtn = document.querySelector('.product-page .carousel-btn.prev');
-        handleTouchEnd(e,
-          () => nextBtn && nextBtn.click(), // swipe left → next
-          () => prevBtn && prevBtn.click()  // swipe right → prev
-        );
-      }, { passive: true });
-    });
-  }
+
+      container.addEventListener("touchend", e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > THRESH) {
+          const sec = container.querySelector("img.secondary");
+          if (sec) sec.classList.toggle("visible");
+        }
+      });
+  });
+
+  // 2) PRODUCT PAGE CAROUSEL: swipe left/right to trigger your arrow buttons
+  const carousel = document.querySelector(".product-page .carousel");
+  if (!carousel) return;
+
+  let x0 = null, y0 = null, isSwiping = false;
+  const IMGS = carousel.querySelector(".carousel-images");
+
+  const MIN_SWIPE = 50; // px
+
+  IMGS.addEventListener("touchstart", e => {
+    const t = e.touches[0];
+    x0 = t.clientX; y0 = t.clientY;
+  }, { passive: true });
+
+  IMGS.addEventListener("touchmove", e => {
+    if (x0 === null) return;
+    const t = e.touches[0];
+    const dx = t.clientX - x0, dy = t.clientY - y0;
+    // if mostly horizontal, prevent vertical scroll and mark swipe
+    if (Math.abs(dx) > Math.abs(dy)) {
+      e.preventDefault();
+      isSwiping = true;
+    }
+  }, { passive: false });
+
+  IMGS.addEventListener("touchend", e => {
+    if (!isSwiping || x0 === null) {
+      x0 = null; isSwiping = false;
+      return;
+    }
+    const dx = e.changedTouches[0].clientX - x0;
+    if (dx > MIN_SWIPE) {
+      carousel.querySelector(".carousel-btn.prev").click();
+    } else if (dx < -MIN_SWIPE) {
+      carousel.querySelector(".carousel-btn.next").click();
+    }
+    x0 = null; isSwiping = false;
+  });
+})();
+
     
 
 

@@ -588,9 +588,9 @@ button{
     left: 10px;
     background-color: red;
     color: white;
-    padding: 5px 5px 3px 5px;
+    padding: 3px;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 500;
     text-transform: uppercase;
     z-index: 2;
   }
@@ -1284,6 +1284,10 @@ button{
       text-decoration: none !important;
     }
 
+    .product-card .product-image:hover img.secondary {
+      opacity: 0 !important;
+    }
+
     .landing {
       background-image: url('your-mobile-background.jpg');
       background-size: cover;
@@ -1435,6 +1439,10 @@ button{
 
     .go-to-cart-filler {
       display: none !important;
+    }
+
+    .sale-badge{
+      font-size: 10px;
     }
 
 
