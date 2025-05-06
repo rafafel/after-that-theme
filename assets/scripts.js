@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const productCards = document.querySelectorAll('.product-card');
 
+  const filler = document.getElementById('product-filler');
+  if (filler) {
+    const totalProducts = productCards.length;
+    filler.style.display = (totalProducts % 3 === 0) ? 'none' : 'flex';
+  }
+
   productCards.forEach((card) => {
     const sizeButtons = card.querySelectorAll('.size-button');
     const variantInput = card.querySelector('.variant-id');
@@ -181,7 +187,6 @@ const filterLinks = document.querySelectorAll('.category-filter-link');
 const products = Array.from(document.querySelectorAll('.product-card'));
 const productGrid = document.querySelector('.product-grid');
 const emptyState = document.getElementById('filtered-empty');
-const filler = document.getElementById('filler');
 
 // Show/hide filter bar
 if (toggleBtn && filterBar) {
@@ -368,8 +373,15 @@ filterLinks.forEach(link => {
 
       // update navbar count badge
       const navCount = document.getElementById('cart-count');
-      if (navCount) navCount.textContent = `(${cart.item_count})`;
+      if (navCount) navCount.textContent = ` ${cart.item_count}`;
+
+      // if we just removed the last item, reload /cart so Liquid will render the empty-cart section
+      if (cart.item_count === 0) {
+        window.location.href = '/cart';
+        return;
+      }
     })
+
     .catch(err => console.error('Cart AJAX failed:', err));
   });
 })();
@@ -408,7 +420,7 @@ filterLinks.forEach(link => {
         .then(cart => {
           const cartCount = document.getElementById('cart-count');
           if (cart.item_count > 0) {
-            cartCount.textContent = `(${cart.item_count})`;
+            cartCount.textContent = ` ${cart.item_count}`;
           } else {
             cartCount.textContent = '';
           }

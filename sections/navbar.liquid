@@ -5,7 +5,7 @@
   <div class="navbar-right">
     <a href="/pages/about">ABOUT</a>
   <a href="/cart">
-    CART<span id="cart-count">{% if cart.item_count > 0 %}({{ cart.item_count }}){% endif %}</span>
+    CART<span id="cart-count">{% if cart.item_count > 0 %} {{ cart.item_count }}{% endif %}</span>
   </a>
   </div>
 </div>
