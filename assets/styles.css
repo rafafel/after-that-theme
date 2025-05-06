@@ -1244,27 +1244,42 @@ button{
     background: none !important;
     padding: 0 !important;
     box-shadow: none !important;
+    border-radius: 0 !important;
   }
 
   /* 2) Style the “body” container */
-  #shopify-pc__banner .shopify-pc__banner__body {
-    max-width: 800px;
+
+  .shopify-pc__banner__wrapper{
+    background: black;
+    margin-bottom: 30px;
+    width: 400px;
+    right: 20px;
+  }
+
+  #shopify-pc__banner__btn-manage-prefs{
+    display: none !important;
+  }
+
+  /*#shopify-pc__banner .shopify-pc__banner__body {
     margin: 0 auto;
-    padding: 1rem 1.5rem;
-    background: #ff0000;
     color: #ededed;
     border-radius: 8px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-  }
+  }*/
 
   /* 3) Tweak the title & text */
-  #shopify-pc__banner__body-title {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+  .shopify-pc__banner__body {
+    padding: 10px;
+    border-radius: 0;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 12px;
   }
+
+  .shopify
   #shopify-pc__banner .shopify-pc__banner__body p {
     flex: 1 1 60%;
     line-height: 1.4;
@@ -1273,26 +1288,22 @@ button{
   /* 4) Layout the buttons */
   #shopify-pc__banner .shopify-pc__banner__btns-granular {
     display: flex;
-    gap: 0.5rem;
   }
 
-  /* 5) Style Accept/Decline */
-  #shopify-pc__banner button[aria-label="Accept"] {
-    background: #454545;
-    color: #ededed;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+  #shopify-pc__banner__btn-accept, #shopify-pc__banner__btn-decline{
+    background-color: #464646;
+    border-radius: 0;
     border: none;
-    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+    margin-top: 0;
   }
-  #shopify-pc__banner button[aria-label="Decline"] {
-    background: transparent;
-    color: #454545;
-    padding: 0.5rem 1rem;
-    border: 1px solid #00ff2a;
-    border-radius: 4px;
-    cursor: pointer;
+
+  /* → remove the “Manage preferences” link so only the two buttons remain */
+  #shopify-pc__banner .shopify-pc__banner__btns-granular a {
+    display: none !important;
   }
+
 
   
   
