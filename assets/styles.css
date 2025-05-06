@@ -196,7 +196,7 @@ button{
     position: relative;
     background-size: cover;
     background-position: center;
-    height: calc(100dvh - 35px);
+    height: calc(100vh - 35px);
     width: 100%;
     background-size: cover;
     background-position: center;
@@ -290,7 +290,7 @@ button{
 
 /* fix logo flash and z-stacking */
 #intro-screen {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 1000;
   display: flex;
