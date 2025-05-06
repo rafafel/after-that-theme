@@ -1251,7 +1251,7 @@ button{
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem 1.5rem;
-    background: #222;
+    background: #ff0000;
     color: #ededed;
     border-radius: 8px;
     display: flex;
@@ -1289,7 +1289,7 @@ button{
     background: transparent;
     color: #454545;
     padding: 0.5rem 1rem;
-    border: 1px solid #454545;
+    border: 1px solid #00ff2a;
     border-radius: 4px;
     cursor: pointer;
   }
