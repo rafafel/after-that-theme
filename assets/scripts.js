@@ -500,6 +500,35 @@ plusWrapper.style.opacity = '1';
 
   //MOBILE
     
+  //IMG SWIPE
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    // COLLECTION PAGES
+    document.querySelectorAll('.product-card .product-image').forEach(container => {
+      let startX = 0;
+      container.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+      container.addEventListener('touchend', e => {
+        const endX = e.changedTouches[0].clientX;
+        const sec = container.querySelector('img.secondary');
+        if (!sec) return;
+        if (endX < startX - 50)   sec.classList.add('visible');
+        else if (endX > startX + 50) sec.classList.remove('visible');
+      });
+    });
+
+    // PRODUCT PAGES
+    const carousel = document.querySelector('.product-page .carousel-images');
+    if (carousel) {
+      let startX = 0;
+      carousel.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+      carousel.addEventListener('touchend', e => {
+        const endX = e.changedTouches[0].clientX;
+        if (endX < startX - 50)
+          document.querySelector('.product-page .carousel-btn.next').click();
+        else if (endX > startX + 50)
+          document.querySelector('.product-page .carousel-btn.prev').click();
+      });
+    }
+  }
     
 
 
