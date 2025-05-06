@@ -1239,66 +1239,61 @@ button{
 
 
   /* COOKIE BANNER */
-  /* hide the default background / padding */
-#shopify-cookie-banner {
-  background: none !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-}
+  /* 1) Reset the wrapper to clear Shopify’s defaults */
+  #shopify-pc__banner.shopify-pc__banner__dialog {
+    background: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
 
-/* give it your own look */
-#shopify-cookie-banner .shopify-ch-body {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem 1.5rem;
-  background: #222;
-  color: #f5f5f5;
-  border-radius: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-}
+  /* 2) Style the “body” container */
+  #shopify-pc__banner .shopify-pc__banner__body {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    background: #222;
+    color: #ededed;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-/* message text */
-#shopify-cookie-banner .shopify-ch-message {
-  flex: 1 1 60%;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
+  /* 3) Tweak the title & text */
+  #shopify-pc__banner__body-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  #shopify-pc__banner .shopify-pc__banner__body p {
+    flex: 1 1 60%;
+    line-height: 1.4;
+  }
 
-/* buttons */
-#shopify-cookie-banner .shopify-ch-accept,
-#shopify-cookie-banner .shopify-ch-decline {
-  font-size: 0.9rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 0.5rem;
-}
+  /* 4) Layout the buttons */
+  #shopify-pc__banner .shopify-pc__banner__btns-granular {
+    display: flex;
+    gap: 0.5rem;
+  }
 
-/* Accept button styling */
-#shopify-cookie-banner .shopify-ch-accept {
-  background: #007bff;
-  color: white;
-}
+  /* 5) Style Accept/Decline */
+  #shopify-pc__banner button[aria-label="Accept"] {
+    background: #454545;
+    color: #ededed;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+  }
+  #shopify-pc__banner button[aria-label="Decline"] {
+    background: transparent;
+    color: #454545;
+    padding: 0.5rem 1rem;
+    border: 1px solid #454545;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 
-/* Decline button (outline style) */
-#shopify-cookie-banner .shopify-ch-decline {
-  background: transparent;
-  color: #007bff;
-  border: 1px solid #007bff;
-}
-
-/* privacy link */
-#shopify-cookie-banner .shopify-ch-link {
-  color: #ddd;
-  text-decoration: underline;
-  margin-left: 1rem;
-}
-
-  
   
   
 
