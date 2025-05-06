@@ -1273,6 +1273,18 @@ button{
       font-size: 10px;
     }
 
+    a:focus,
+    a:hover,
+    a:active,
+    button:focus,
+    button:hover,
+    button:active {
+      outline: none !important;
+      color: inherit !important;
+      background: none !important;
+      text-decoration: none !important;
+    }
+
     .landing {
       background-image: url('your-mobile-background.jpg');
       background-size: cover;
@@ -1592,17 +1604,6 @@ button{
   }
 
 
-  }
-
-
-  @media (hover: none) and (pointer: coarse) {
-    /* disable only link color/background/text-decoration changes on hover */
-    a:hover,
-    .checkout-link:hover {
-      color: inherit !important;
-      background-color: transparent !important;
-      text-decoration: none !important;
-    }
   }
   
   
