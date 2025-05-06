@@ -8,8 +8,8 @@ LIGHT GRAY: #eeeeee
 
 @font-face {
   font-family: 'Akzidenz';
-  src: url('{{ "AkzidenzGrotesk-LightExtended.woff2" | asset_url }}') format('woff2'),
-       url('{{ "AkzidenzGrotesk-LightExtended.woff" | asset_url }}') format('woff');
+  src: url('AkzidenzGrotesk-LightExtended.woff2') format('woff2'),
+       url('AkzidenzGrotesk-LightExtended.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -17,8 +17,8 @@ LIGHT GRAY: #eeeeee
 
 @font-face {
   font-family: 'Akzidenz';
-  src: url('{{ "AkzidenzGrotesk-Medium.woff2" | asset_url }}') format('woff2'),
-       url('{{ "AkzidenzGrotesk-Medium.woff" | asset_url }}') format('woff');
+  src: url('AkzidenzGrotesk-Medium.woff2') format('woff2'),
+       url('AkzidenzGrotesk-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -26,12 +26,13 @@ LIGHT GRAY: #eeeeee
 
 @font-face {
   font-family: 'Akzidenz';
-  src: url('{{ "AkzidenzGrotesk-BoldExtended.woff2" | asset_url }}') format('woff2'),
-       url('{{ "AkzidenzGrotesk-BoldExtended.woff" | asset_url }}') format('woff');
+  src: url('AkzidenzGrotesk-BoldExtended.woff2') format('woff2'),
+       url('AkzidenzGrotesk-BoldExtended.woff') format('woff');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+
 
 
 * {
@@ -46,7 +47,7 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'Akzidenz', sans-serif;
-    font-weight: 700;
+    font-weight: 500;
     height: 100%;
     width: 100%;
   }
@@ -59,12 +60,12 @@ a{
   all: unset;
   cursor: pointer;
   display: inline;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 button{
   all:unset;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .underline-always {
@@ -236,7 +237,7 @@ button{
     position: absolute;
     color: white;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 300;
     pointer-events: none;
     transition: transform 0.3s ease;
     transform-origin: center;
@@ -852,7 +853,7 @@ button{
     color: white;
     display: flex;
     align-items: center;
-    font-weight: 700;
+    font-weight: 500;
   }
   
   .empty-back-link .arrow {
@@ -933,7 +934,7 @@ button{
     text-decoration: underline;
     cursor: pointer;
     padding-top: 50px;
-    font-weight: 800;
+    font-weight: 500;
   }
   
   .cart-item-details {
@@ -1083,7 +1084,7 @@ button{
     background: none;
     border: none;
     font-size: inherit;
-    font-weight: 800;
+    font-weight: 500;
     cursor: pointer;
     color: #5d5d5d;
     padding: 0 3px;

@@ -501,33 +501,62 @@ plusWrapper.style.opacity = '1';
   //MOBILE
     
   //IMG SWIPE
-  if (window.matchMedia('(max-width: 768px)').matches) {
-    // COLLECTION PAGES
-    document.querySelectorAll('.product-card .product-image').forEach(container => {
-      let startX = 0;
-      container.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-      container.addEventListener('touchend', e => {
-        const endX = e.changedTouches[0].clientX;
-        const sec = container.querySelector('img.secondary');
-        if (!sec) return;
-        if (endX < startX - 50)   sec.classList.add('visible');
-        else if (endX > startX + 50) sec.classList.remove('visible');
-      });
-    });
-
-    // PRODUCT PAGES
-    const carousel = document.querySelector('.product-page .carousel-images');
-    if (carousel) {
-      let startX = 0;
-      carousel.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-      carousel.addEventListener('touchend', e => {
-        const endX = e.changedTouches[0].clientX;
-        if (endX < startX - 50)
-          document.querySelector('.product-page .carousel-btn.next').click();
-        else if (endX > startX + 50)
-          document.querySelector('.product-page .carousel-btn.prev').click();
-      });
+  if (window.innerWidth <= 768) {
+    // give containers a hint for vertical scroll
+    const style = document.createElement('style');
+    style.textContent = `
+      .product-card .product-image,
+      .product-page .carousel-images {
+        touch-action: pan-y;
+        -ms-touch-action: pan-y;
+      }
+    `;
+    document.head.append(style);
+  
+    // shared swipe detection
+    let xStart = null, yStart = null;
+    function handleTouchStart(e) {
+      const t = e.touches[0];
+      xStart = t.clientX;
+      yStart = t.clientY;
     }
+    function handleTouchEnd(e, onLeft, onRight) {
+      if (xStart === null || yStart === null) return;
+      const t = e.changedTouches[0];
+      const xEnd = t.clientX, yEnd = t.clientY;
+      const xDiff = xStart - xEnd, yDiff = yStart - yEnd;
+      // horizontal swipe if |x| > |y| and exceeds threshold
+      if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 30) {
+        xDiff > 0 ? onLeft() : onRight();
+      }
+      xStart = yStart = null;
+    }
+  
+    // 1) Collection-page cards
+    document.querySelectorAll('.product-card .product-image').forEach(card => {
+      card.addEventListener('touchstart', handleTouchStart, { passive: true });
+      card.addEventListener('touchend', e => {
+        const altImg = card.querySelector('img.secondary');
+        if (!altImg) return;
+        handleTouchEnd(e,
+          () => altImg.classList.add('visible'),   // swipe left
+          () => altImg.classList.remove('visible') // swipe right
+        );
+      }, { passive: true });
+    });
+  
+    // 2) Product-page carousel
+    document.querySelectorAll('.product-page .carousel-images').forEach(car => {
+      car.addEventListener('touchstart', handleTouchStart, { passive: true });
+      car.addEventListener('touchend', e => {
+        const nextBtn = document.querySelector('.product-page .carousel-btn.next');
+        const prevBtn = document.querySelector('.product-page .carousel-btn.prev');
+        handleTouchEnd(e,
+          () => nextBtn && nextBtn.click(), // swipe left → next
+          () => prevBtn && prevBtn.click()  // swipe right → prev
+        );
+      }, { passive: true });
+    });
   }
     
 
