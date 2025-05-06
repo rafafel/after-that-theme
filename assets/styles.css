@@ -1254,21 +1254,13 @@ button{
     margin-bottom: 30px;
     width: 400px;
     right: 20px;
+    flex-direction: row !important;
   }
 
   #shopify-pc__banner__btn-manage-prefs{
     display: none !important;
   }
 
-  /*#shopify-pc__banner .shopify-pc__banner__body {
-    margin: 0 auto;
-    color: #ededed;
-    border-radius: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-  }*/
 
   /* 3) Tweak the title & text */
   .shopify-pc__banner__body {
@@ -1277,6 +1269,7 @@ button{
     text-transform: uppercase;
     font-weight: 500;
     font-size: 12px;
+    margin-bottom: 0 !important;
   }
 
   .shopify
@@ -1288,6 +1281,11 @@ button{
   /* 4) Layout the buttons */
   #shopify-pc__banner .shopify-pc__banner__btns-granular {
     display: flex;
+  }
+
+  .shopify-pc__banner__btns{
+    gap: 0px !important;
+    
   }
 
   #shopify-pc__banner__btn-accept, #shopify-pc__banner__btn-decline{
