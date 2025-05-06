@@ -196,7 +196,7 @@ button{
     position: relative;
     background-size: cover;
     background-position: center;
-    height: calc(100vh - 35px);
+    height: calc(100dvh - 35px);
     width: 100%;
     background-size: cover;
     background-position: center;
