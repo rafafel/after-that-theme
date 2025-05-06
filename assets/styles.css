@@ -1239,7 +1239,6 @@ button{
 
 
   /* COOKIE BANNER */
-  /* 1) Reset the wrapper to clear Shopify’s defaults */
   #shopify-pc__banner.shopify-pc__banner__dialog {
     background: none !important;
     padding: 0 !important;
@@ -1251,10 +1250,15 @@ button{
 
   .shopify-pc__banner__wrapper{
     background: black;
-    margin-bottom: 30px;
+    margin-bottom: 0px;
     width: 400px;
     right: 20px;
     flex-direction: row !important;
+    position: fixed !important;
+    bottom: 20px !important;  
+    right: 20px !important;   
+    left: auto !important;     
+    width: auto !important;
   }
 
   #shopify-pc__banner__btn-manage-prefs{
@@ -1272,6 +1276,10 @@ button{
     margin-bottom: 0 !important;
   }
 
+  .shopify-pc__banner__body a:hover{
+    color: #464646;
+  }
+
   .shopify
   #shopify-pc__banner .shopify-pc__banner__body p {
     flex: 1 1 60%;
@@ -1285,16 +1293,22 @@ button{
 
   .shopify-pc__banner__btns{
     gap: 0px !important;
-    
+    white-space: nowrap;
   }
 
   #shopify-pc__banner__btn-accept, #shopify-pc__banner__btn-decline{
-    background-color: #464646;
+    background-color: black;
     border-radius: 0;
     border: none;
+    text-transform: uppercase;
     font-size: 12px;
     padding: 0;
     margin-top: 0;
+    flex: 1 1 0;
+  }
+
+  #shopify-pc__banner__btn-accept:hover, #shopify-pc__banner__btn-decline:hover{
+    color: #464646;
   }
 
   /* → remove the “Manage preferences” link so only the two buttons remain */
@@ -1669,6 +1683,57 @@ button{
     margin-top: 6px;
   }
 
+
+  /* COOKIES BANNER */
+
+
+  .shopify-pc__banner__body p{
+    text-align: center;
+  }
+
+  .shopify-pc__banner__wrapper{
+    flex-direction: column !important;
+    
+  }
+
+  #shopify-pc__banner__btn-accept, #shopify-pc__banner__btn-decline{
+    font-size: 10px;
+    flex: 0;
+    margin: 0px 10px;
+  }
+
+  .shopify-pc__banner__btns{
+    flex-direction: row !important;
+    margin-bottom: 10px;
+    font-size: 10px !important;
+    width: auto;
+    justify-content: center !important;
+  }
+
+  #shopify-pc__banner.shopify-pc__banner__dialog {
+    position: fixed !important;
+    bottom: 1rem !important;
+    left: 50% !important;
+    right: auto !important;
+    width: 90vw !important;
+    max-width: none !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 2) Reset the wrapper so it just fills that section */
+  #shopify-pc__banner .shopify-pc__banner__wrapper {
+    position: relative !important;
+    bottom: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    flex-direction: column !important;
+  }
 
   }
   
