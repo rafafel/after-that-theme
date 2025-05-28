@@ -1540,6 +1540,10 @@ button{
       font-size: 10px;
     }
 
+    .grid-divider{
+      display: none;
+    }
+
 
     /*CART*/
 
