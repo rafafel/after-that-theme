@@ -1521,7 +1521,9 @@ button{
       display: block;
     }
     
-    
+    .product-info-right .product-title{
+      font-size: 10px;
+    }
   
     .product-page .product-main-info {
       flex: 1;
