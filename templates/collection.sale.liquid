@@ -20,6 +20,7 @@
       <a href="?filter=jacket" class="category-filter-link" data-filter="jacket">JACKETS</a>
     </div>
 
+  <div class="product-grid-wrapper">
     <div class="product-grid">
       {% for product in collection.products %}
         <div class="product-card" data-tags="{{ product.tags | join: ',' | downcase }}">
@@ -106,6 +107,10 @@
       </div>
     </div>
 
+    <div class="grid-divider divider-1"></div>
+    <div class="grid-divider divider-2"></div>
+    
+  </div>
 
   <div
     id="filtered-empty"
